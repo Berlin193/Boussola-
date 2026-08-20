@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BOUSSOLA</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div id="app">
+
+    <!-- شاشة البداية -->
+    <section id="home" class="screen active">
+
+      <div class="logo">
+        BOUSSOLA
+        <span>THE HUMAN PATTERN</span>
+      </div>
+
+      <div class="intro">
+
+        <p class="small">رحلة إلى ما وراء قراراتك</p>
+
+        <h1>
+          ماذا لو كان<br>
+          مستقبلك أقرب<br>
+          مما تتخيل؟
+        </h1>
+
+        <p class="description">
+          تجربة سينمائية تستكشف الخوف، الطموح،
+          الفشل، النجاح، الأمنيات، والقرارات التي
+          يمكن أن تغير مسار حياتك.
+        </p>
+
+        <button onclick="startJourney()">
+          ابدأ الرحلة
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- شاشة المراحل -->
+    <section id="journey" class="screen">
+
+      <div class="top">
+
+        <button class="back" onclick="goBack()">‹</button>
+
+        <span id="chapter">
+          الفصل 01
+        </span>
+
+        <button class="sound" onclick="toggleSound()">
+          🔊
+        </button>
+
+      </div>
+
+
+      <div class="progress">
+
+        <div id="progressBar"></div>
+
+      </div>
+
+
+      <div class="content">
+
+        <p id="stageNumber" class="small"></p>
+
+        <h2 id="stageTitle"></h2>
+
+        <p id="stageText"></p>
+
+        <div id="choices"></div>
+
+        <button
+          id="continueButton"
+          class="continue"
+          onclick="nextStage()"
+        >
+          تابع
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- النهاية -->
+    <section id="ending" class="screen">
+
+      <div class="endingContent">
+
+        <p class="small">
+          THE FIRST KEY
+        </p>
+
+        <h1>
+          المستقبل<br>
+          لم يُكتب بعد.
+        </h1>
+
+        <p>
+          أنت لم تكتشف مستقبلك.
+          أنت اكتشفت شيئًا أهم...
+          طريقة اختيارك.
+        </p>
+
+        <button onclick="restart()">
+          ابدأ من جديد
+        </button>
+
+      </div>
+
+    </section>
+
+  </div>
+
+
+  <script src="app.js"></script>
+
+</body>
+</html>
