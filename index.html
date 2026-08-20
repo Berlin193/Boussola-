@@ -1,131 +1,308 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-  <title>BOUSSOLA</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-  <link rel="stylesheet" href="style.css">
+    <meta
+        name="theme-color"
+        content="#050507"
+    >
+
+    <title>BOUSSOLA</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <div id="app">
+    <main id="app">
 
-    <!-- شاشة البداية -->
-    <section id="home" class="screen active">
+        <!-- =========================
+             HOME
+        ========================== -->
 
-      <div class="logo">
-        BOUSSOLA
-        <span>THE HUMAN PATTERN</span>
-      </div>
-
-      <div class="intro">
-
-        <p class="small">رحلة إلى ما وراء قراراتك</p>
-
-        <h1>
-          ماذا لو كان<br>
-          مستقبلك أقرب<br>
-          مما تتخيل؟
-        </h1>
-
-        <p class="description">
-          تجربة سينمائية تستكشف الخوف، الطموح،
-          الفشل، النجاح، الأمنيات، والقرارات التي
-          يمكن أن تغير مسار حياتك.
-        </p>
-
-        <button onclick="startJourney()">
-          ابدأ الرحلة
-        </button>
-
-      </div>
-
-    </section>
-
-
-    <!-- شاشة المراحل -->
-    <section id="journey" class="screen">
-
-      <div class="top">
-
-        <button class="back" onclick="goBack()">‹</button>
-
-        <span id="chapter">
-          الفصل 01
-        </span>
-
-        <button class="sound" onclick="toggleSound()">
-          🔊
-        </button>
-
-      </div>
-
-
-      <div class="progress">
-
-        <div id="progressBar"></div>
-
-      </div>
-
-
-      <div class="content">
-
-        <p id="stageNumber" class="small"></p>
-
-        <h2 id="stageTitle"></h2>
-
-        <p id="stageText"></p>
-
-        <div id="choices"></div>
-
-        <button
-          id="continueButton"
-          class="continue"
-          onclick="nextStage()"
+        <section
+            id="home"
+            class="screen active"
         >
-          تابع
-        </button>
 
-      </div>
+            <div class="brand">
+                BOUSSOLA
 
-    </section>
-
-
-    <!-- النهاية -->
-    <section id="ending" class="screen">
-
-      <div class="endingContent">
-
-        <p class="small">
-          THE FIRST KEY
-        </p>
-
-        <h1>
-          المستقبل<br>
-          لم يُكتب بعد.
-        </h1>
-
-        <p>
-          أنت لم تكتشف مستقبلك.
-          أنت اكتشفت شيئًا أهم...
-          طريقة اختيارك.
-        </p>
-
-        <button onclick="restart()">
-          ابدأ من جديد
-        </button>
-
-      </div>
-
-    </section>
-
-  </div>
+                <span>
+                    THE HUMAN PATTERN
+                </span>
+            </div>
 
 
-  <script src="app.js"></script>
+            <div class="home-content">
+
+                <p class="eyebrow">
+                    رحلة إلى ما وراء قراراتك
+                </p>
+
+
+                <h1>
+                    ماذا لو كان<br>
+                    مستقبلك أقرب<br>
+                    مما تتخيل؟
+                </h1>
+
+
+                <p class="intro-text">
+                    تجربة سينمائية تستكشف
+                    الخوف والطموح والفشل
+                    والنجاح والأمنيات
+                    والقرارات التي يمكن أن
+                    تغير مسار حياتك.
+                </p>
+
+
+                <button
+                    id="startButton"
+                    class="primary-button"
+                >
+                    ابدأ الرحلة
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             JOURNEY
+        ========================== -->
+
+        <section
+            id="journey"
+            class="screen"
+        >
+
+            <header class="top-bar">
+
+                <button
+                    id="backButton"
+                    class="icon-button"
+                    aria-label="رجوع"
+                >
+                    ‹
+                </button>
+
+
+                <div
+                    id="chapter"
+                    class="chapter"
+                >
+                    الفصل 01
+                </div>
+
+
+                <button
+                    id="settingsButton"
+                    class="icon-button"
+                    aria-label="الإعدادات"
+                >
+                    ⚙
+                </button>
+
+            </header>
+
+
+            <div class="progress-container">
+
+                <div
+                    id="progressBar"
+                    class="progress-bar"
+                ></div>
+
+            </div>
+
+
+            <div class="stage-content">
+
+                <p
+                    id="stageNumber"
+                    class="eyebrow"
+                >
+                    المرحلة 01
+                </p>
+
+
+                <h2 id="stageTitle">
+                    البداية
+                </h2>
+
+
+                <p id="stageText">
+                    ...
+                </p>
+
+
+                <div
+                    id="choices"
+                    class="choices"
+                >
+                </div>
+
+
+                <button
+                    id="continueButton"
+                    class="primary-button continue-button"
+                >
+                    تابع
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ENDING
+        ========================== -->
+
+        <section
+            id="ending"
+            class="screen"
+        >
+
+            <div class="ending-content">
+
+                <p class="eyebrow">
+                    THE FIRST KEY
+                </p>
+
+
+                <h1>
+                    المستقبل<br>
+                    لم يُكتب بعد.
+                </h1>
+
+
+                <p>
+                    أنت لم تكتشف مستقبلك.
+                    أنت اكتشفت شيئًا أهم...
+                    طريقة اختيارك.
+                </p>
+
+
+                <button
+                    id="restartButton"
+                    class="primary-button"
+                >
+                    ابدأ من جديد
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             SETTINGS
+        ========================== -->
+
+        <div
+            id="settingsPanel"
+            class="settings-overlay"
+            aria-hidden="true"
+        >
+
+            <div class="settings-sheet">
+
+                <div class="settings-header">
+
+                    <h3>
+                        الإعدادات
+                    </h3>
+
+
+                    <button
+                        id="closeSettings"
+                        class="close-button"
+                        aria-label="إغلاق"
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+
+                <div class="setting">
+
+                    <div class="setting-info">
+
+                        <strong>
+                            الموسيقى
+                        </strong>
+
+                        <small>
+                            التحكم في موسيقى ومؤثرات الرحلة
+                        </small>
+
+                    </div>
+
+
+                    <button
+                        id="musicToggle"
+                        class="toggle-button"
+                    >
+                        تشغيل
+                    </button>
+
+                </div>
+
+
+                <div class="setting">
+
+                    <div class="setting-info">
+
+                        <strong>
+                            الحركة
+                        </strong>
+
+                        <small>
+                            تقليل الانتقالات للأجهزة الضعيفة
+                        </small>
+
+                    </div>
+
+
+                    <button
+                        id="motionToggle"
+                        class="toggle-button"
+                    >
+                        عادي
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             TOAST
+        ========================== -->
+
+        <div
+            id="toast"
+            class="toast"
+        ></div>
+
+    </main>
+
+
+    <script src="app.js"></script>
 
 </body>
+
 </html>
