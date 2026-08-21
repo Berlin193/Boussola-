@@ -6,13 +6,10 @@
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     >
 
-    <meta
-        name="theme-color"
-        content="#050507"
-    >
+    <meta name="theme-color" content="#07070a">
 
     <title>BOUSSOLA</title>
 
@@ -21,92 +18,22 @@
 
 <body>
 
-    <main id="app">
+    <div id="app">
 
-        <!-- =========================
-             HOME
-        ========================== -->
+        <div class="ambient ambient-one"></div>
+        <div class="ambient ambient-two"></div>
 
-        <section
-            id="home"
-            class="screen active"
-        >
+        <section id="homeScreen" class="screen active">
 
-            <div class="brand">
-                BOUSSOLA
+            <header class="home-header">
 
-                <span>
-                    THE HUMAN PATTERN
-                </span>
-            </div>
-
-
-            <div class="home-content">
-
-                <p class="eyebrow">
-                    رحلة إلى ما وراء قراراتك
-                </p>
-
-
-                <h1>
-                    ماذا لو كان<br>
-                    مستقبلك أقرب<br>
-                    مما تتخيل؟
-                </h1>
-
-
-                <p class="intro-text">
-                    تجربة سينمائية تستكشف
-                    الخوف والطموح والفشل
-                    والنجاح والأمنيات
-                    والقرارات التي يمكن أن
-                    تغير مسار حياتك.
-                </p>
-
-
-                <button
-                    id="startButton"
-                    class="primary-button"
-                >
-                    ابدأ الرحلة
-                </button>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             JOURNEY
-        ========================== -->
-
-        <section
-            id="journey"
-            class="screen"
-        >
-
-            <header class="top-bar">
-
-                <button
-                    id="backButton"
-                    class="icon-button"
-                    aria-label="رجوع"
-                >
-                    ‹
-                </button>
-
-
-                <div
-                    id="chapter"
-                    class="chapter"
-                >
-                    الفصل 01
+                <div class="logo">
+                    BOUSSOLA
                 </div>
 
-
                 <button
-                    id="settingsButton"
-                    class="icon-button"
+                    id="homeSettings"
+                    class="round-button"
                     aria-label="الإعدادات"
                 >
                     ⚙
@@ -115,119 +42,353 @@
             </header>
 
 
-            <div class="progress-container">
+            <div class="home-center">
 
-                <div
-                    id="progressBar"
-                    class="progress-bar"
-                ></div>
+                <div class="orbit">
+
+                    <div class="orbit-ring ring-one"></div>
+                    <div class="orbit-ring ring-two"></div>
+
+                    <div class="orbit-core">
+                        <span>01</span>
+                    </div>
+
+                </div>
+
+
+                <p class="home-label">
+                    رحلة لاكتشاف ذاتك
+                </p>
+
+
+                <h1>
+                    ماذا لو<br>
+                    كان مستقبلك<br>
+                    أقرب مما تتخيل؟
+                </h1>
+
+
+                <p class="home-description">
+                    رحلة تفاعلية تتغير مع اختياراتك
+                    وتكشف لك طرقًا لم تكن تراها من قبل
+                </p>
+
+
+                <button
+                    id="startButton"
+                    class="main-button"
+                >
+                    <span>ابدأ الرحلة</span>
+                    <span class="button-arrow">←</span>
+                </button>
 
             </div>
 
 
-            <div class="stage-content">
+            <div class="home-footer">
 
-                <p
-                    id="stageNumber"
-                    class="eyebrow"
+                <span>
+                    تجربة تفاعلية
+                </span>
+
+                <span class="footer-dot"></span>
+
+                <span>
+                    إصدار أولي
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <section id="journeyScreen" class="screen">
+
+            <header class="journey-header">
+
+                <button
+                    id="backButton"
+                    class="round-button"
                 >
-                    المرحلة 01
-                </p>
+                    →
+                </button>
 
 
-                <h2 id="stageTitle">
-                    البداية
+                <div class="chapter-info">
+
+                    <span id="chapterNumber">
+                        الفصل الأول
+                    </span>
+
+                    <small id="chapterTitle">
+                        البداية
+                    </small>
+
+                </div>
+
+
+                <button
+                    id="journeySettings"
+                    class="round-button"
+                >
+                    ⚙
+                </button>
+
+            </header>
+
+
+            <div class="journey-progress">
+
+                <div class="progress-track">
+                    <div
+                        id="progressBar"
+                        class="progress-fill"
+                    ></div>
+                </div>
+
+                <span id="progressText">
+                    01
+                </span>
+
+            </div>
+
+
+            <main class="question-area">
+
+                <div class="question-meta">
+
+                    <span id="stageLabel">
+                        المرحلة الأولى
+                    </span>
+
+                    <span class="meta-line"></span>
+
+                </div>
+
+
+                <h2 id="questionTitle">
+                    كل شيء يبدأ بسؤال
                 </h2>
 
 
-                <p id="stageText">
-                    ...
+                <p id="questionText">
+                    قبل أن تبحث عن مستقبلك
+                    اسأل نفسك ماذا تريد فعلًا؟
                 </p>
 
 
                 <div
                     id="choices"
                     class="choices"
-                >
-                </div>
+                ></div>
 
 
                 <button
                     id="continueButton"
-                    class="primary-button continue-button"
+                    class="continue-button"
                 >
-                    تابع
+                    متابعة
+                    <span>←</span>
                 </button>
 
-            </div>
+            </main>
 
         </section>
 
 
-        <!-- =========================
-             ENDING
-        ========================== -->
+        <section id="chaptersScreen" class="screen">
 
-        <section
-            id="ending"
-            class="screen"
-        >
-
-            <div class="ending-content">
-
-                <p class="eyebrow">
-                    THE FIRST KEY
-                </p>
-
-
-                <h1>
-                    المستقبل<br>
-                    لم يُكتب بعد.
-                </h1>
-
-
-                <p>
-                    أنت لم تكتشف مستقبلك.
-                    أنت اكتشفت شيئًا أهم...
-                    طريقة اختيارك.
-                </p>
-
+            <header class="page-header">
 
                 <button
-                    id="restartButton"
-                    class="primary-button"
+                    id="chaptersBack"
+                    class="round-button"
                 >
-                    ابدأ من جديد
+                    →
                 </button>
 
-            </div>
+                <div>
+                    <span>رحلتك</span>
+                    <small>الفصول</small>
+                </div>
+
+                <div class="header-spacer"></div>
+
+            </header>
+
+
+            <main class="chapters-content">
+
+                <div class="page-intro">
+
+                    <span>
+                        الطريق أمامك
+                    </span>
+
+                    <h2>
+                        كل فصل<br>
+                        يفتح بابًا جديدًا
+                    </h2>
+
+                </div>
+
+
+                <div
+                    id="chaptersList"
+                    class="chapters-list"
+                ></div>
+
+            </main>
 
         </section>
 
 
-        <!-- =========================
-             SETTINGS
-        ========================== -->
+        <section id="profileScreen" class="screen">
+
+            <header class="page-header">
+
+                <button
+                    id="profileBack"
+                    class="round-button"
+                >
+                    →
+                </button>
+
+                <div>
+                    <span>رحلتي</span>
+                    <small>ما اكتشفناه حتى الآن</small>
+                </div>
+
+                <div class="header-spacer"></div>
+
+            </header>
+
+
+            <main class="profile-content">
+
+                <div class="profile-card">
+
+                    <span class="profile-card-label">
+                        نمط رحلتك
+                    </span>
+
+                    <h2 id="profilePattern">
+                        لم يتحدد بعد
+                    </h2>
+
+                    <p id="profileDescription">
+                        اختياراتك القادمة ستبدأ
+                        في تشكيل مسارك هنا
+                    </p>
+
+                </div>
+
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+
+                        <span>الطموح</span>
+
+                        <strong id="ambitionStat">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <span>الشجاعة</span>
+
+                        <strong id="courageStat">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <span>الفضول</span>
+
+                        <strong id="curiosityStat">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <span>التغيير</span>
+
+                        <strong id="changeStat">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </main>
+
+        </section>
+
+
+        <nav id="bottomNav" class="bottom-nav">
+
+            <button
+                id="navHome"
+                class="nav-item active"
+            >
+                <span>⌂</span>
+                <small>الرئيسية</small>
+            </button>
+
+
+            <button
+                id="navChapters"
+                class="nav-item"
+            >
+                <span>◈</span>
+                <small>الفصول</small>
+            </button>
+
+
+            <button
+                id="navProfile"
+                class="nav-item"
+            >
+                <span>◉</span>
+                <small>رحلتي</small>
+            </button>
+
+        </nav>
+
 
         <div
-            id="settingsPanel"
+            id="settingsOverlay"
             class="settings-overlay"
-            aria-hidden="true"
         >
 
-            <div class="settings-sheet">
+            <div
+                id="settingsSheet"
+                class="settings-sheet"
+            >
 
-                <div class="settings-header">
+                <div class="sheet-handle"></div>
 
-                    <h3>
-                        الإعدادات
-                    </h3>
+                <div class="settings-title">
 
+                    <div>
+                        <span>BOUSSOLA</span>
+                        <h3>الإعدادات</h3>
+                    </div>
 
                     <button
                         id="closeSettings"
                         class="close-button"
-                        aria-label="إغلاق"
                     >
                         ×
                     </button>
@@ -235,24 +396,18 @@
                 </div>
 
 
-                <div class="setting">
+                <div class="setting-row">
 
-                    <div class="setting-info">
-
-                        <strong>
-                            الموسيقى
-                        </strong>
-
+                    <div>
+                        <strong>الموسيقى</strong>
                         <small>
-                            التحكم في موسيقى ومؤثرات الرحلة
+                            أجواء صوتية أثناء الرحلة
                         </small>
-
                     </div>
-
 
                     <button
                         id="musicToggle"
-                        class="toggle-button"
+                        class="setting-toggle"
                     >
                         تشغيل
                     </button>
@@ -260,27 +415,37 @@
                 </div>
 
 
-                <div class="setting">
+                <div class="setting-row">
 
-                    <div class="setting-info">
-
-                        <strong>
-                            الحركة
-                        </strong>
-
+                    <div>
+                        <strong>تقليل الحركة</strong>
                         <small>
-                            تقليل الانتقالات للأجهزة الضعيفة
+                            انتقالات أخف للأجهزة الضعيفة
                         </small>
-
                     </div>
-
 
                     <button
                         id="motionToggle"
-                        class="toggle-button"
+                        class="setting-toggle"
                     >
-                        عادي
+                        إيقاف
                     </button>
+
+                </div>
+
+
+                <div class="setting-row">
+
+                    <div>
+                        <strong>حفظ التقدم</strong>
+                        <small>
+                            يتم حفظ رحلتك تلقائيًا
+                        </small>
+                    </div>
+
+                    <span class="status-active">
+                        مفعّل
+                    </span>
 
                 </div>
 
@@ -289,16 +454,9 @@
         </div>
 
 
-        <!-- =========================
-             TOAST
-        ========================== -->
+        <div id="toast" class="toast"></div>
 
-        <div
-            id="toast"
-            class="toast"
-        ></div>
-
-    </main>
+    </div>
 
 
     <script src="app.js"></script>
