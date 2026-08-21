@@ -1,523 +1,1051 @@
+/* ==========================================
+   BOUSSOLA
+   Main CSS
+   Version 0.3.0
+========================================== */
+
+
+/* ==========================================
+   RESET
+========================================== */
+
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
+
 
 html,
 body {
-  width: 100%;
-  min-height: 100%;
-
-  background: #050507;
-  color: #eeeeee;
-
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+    width: 100%;
+    min-height: 100%;
 }
+
 
 body {
-  overflow: hidden;
+    overflow: hidden;
+
+    background: #050507;
+
+    color: #eeeeee;
+
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Tahoma,
+        Arial,
+        sans-serif;
+
+    -webkit-tap-highlight-color: transparent;
 }
 
 
-/* =========================
+/* ==========================================
    APP
-========================= */
+========================================== */
 
 #app {
-  width: 100%;
-  min-height: 100vh;
+    position: relative;
 
-  background:
-    radial-gradient(
-      circle at 50% 20%,
-      #171923 0%,
-      #090a0f 45%,
-      #030304 100%
-    );
+    width: 100%;
+    min-height: 100vh;
 
-  position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 15%,
+            #181a24 0%,
+            #0b0c11 42%,
+            #050507 75%,
+            #020203 100%
+        );
 }
 
 
-/* Film Grain */
+/* طبقة خفيفة جدًا تعطي إحساس سينمائي */
 
-#app::after {
-  content: "";
+#app::before {
+    content: "";
 
-  position: fixed;
-  inset: 0;
+    position: fixed;
 
-  pointer-events: none;
+    inset: 0;
 
-  opacity: 0.035;
+    pointer-events: none;
 
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background:
+        radial-gradient(
+            circle at center,
+            transparent 35%,
+            rgba(0, 0, 0, 0.38) 100%
+        );
+
+    z-index: 5;
 }
 
 
-/* =========================
-   SCREENS
-========================= */
+/* ==========================================
+   SCREEN SYSTEM
+========================================== */
 
 .screen {
+    position: absolute;
 
-  position: absolute;
+    inset: 0;
 
-  inset: 0;
+    width: 100%;
+    min-height: 100vh;
 
-  min-height: 100vh;
+    display: none;
 
-  padding: 30px 20px;
+    flex-direction: column;
 
-  display: none;
+    justify-content: center;
 
-  flex-direction: column;
+    padding:
+        30px
+        20px;
 
-  justify-content: center;
-
-  opacity: 0;
-
-  transform: translateY(20px);
-
+    opacity: 0;
 }
+
 
 .screen.active {
+    display: flex;
 
-  display: flex;
-
-  animation: screenIn 0.8s ease forwards;
-
+    animation:
+        screenEnter
+        0.38s
+        cubic-bezier(
+            0.22,
+            0.61,
+            0.36,
+            1
+        )
+        forwards;
 }
 
 
-/* =========================
+/* انتقال خروج خفيف جدًا */
+
+#journey.leaving {
+    animation:
+        screenLeave
+        0.18s
+        ease
+        forwards;
+}
+
+
+/* ==========================================
    HOME
-========================= */
+========================================== */
 
-.logo {
+.brand {
+    position: absolute;
 
-  position: absolute;
+    top: 28px;
+    left: 24px;
 
-  top: 30px;
-  left: 25px;
+    z-index: 10;
 
-  font-size: 14px;
+    color: #d7d8de;
 
-  letter-spacing: 5px;
+    font-size: 14px;
 
-  color: #d5d5dc;
-}
+    letter-spacing: 5px;
 
-.logo span {
-
-  display: block;
-
-  margin-top: 5px;
-
-  font-size: 7px;
-
-  letter-spacing: 2px;
-
-  color: #686b78;
+    font-weight: 500;
 }
 
 
-.intro {
+.brand span {
+    display: block;
 
-  width: 100%;
-  max-width: 650px;
+    margin-top: 5px;
 
-  margin: auto;
+    color: #666a76;
+
+    font-size: 7px;
+
+    letter-spacing: 2px;
 }
 
 
-.small {
+/* ==========================================
+   HOME CONTENT
+========================================== */
 
-  color: #777b89;
+.home-content {
+    width: 100%;
 
-  font-size: 11px;
+    max-width: 650px;
 
-  letter-spacing: 3px;
-
-  margin-bottom: 22px;
+    margin: auto;
 }
 
 
-h1 {
+.eyebrow {
+    margin-bottom: 20px;
 
-  font-size: clamp(
-    42px,
-    12vw,
-    80px
-  );
+    color: #737783;
 
-  line-height: 1.03;
+    font-size: 11px;
 
-  letter-spacing: -2px;
+    letter-spacing: 3px;
 
-  margin-bottom: 25px;
+    line-height: 1.5;
 }
 
 
-.description {
+.home-content h1 {
+    margin-bottom: 25px;
 
-  max-width: 550px;
+    color: #f0f0f2;
 
-  color: #9295a0;
+    font-size:
+        clamp(
+            42px,
+            12vw,
+            78px
+        );
 
-  font-size: 16px;
+    line-height: 1.03;
 
-  line-height: 1.9;
+    letter-spacing: -2px;
 
-  margin-bottom: 35px;
+    font-weight: 700;
 }
 
 
-/* =========================
-   BUTTON
-========================= */
+.intro-text {
+    max-width: 570px;
+
+    margin-bottom: 32px;
+
+    color: #9295a0;
+
+    font-size: 16px;
+
+    line-height: 1.9;
+}
+
+
+/* ==========================================
+   BUTTONS
+========================================== */
 
 button {
+    font-family: inherit;
 
-  border: none;
+    border: 0;
 
-  cursor: pointer;
+    outline: none;
 
-  font-family: inherit;
+    cursor: pointer;
 
-  transition:
-    transform 0.2s,
-    background 0.2s;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 
-.intro button,
-.endingContent button {
+.primary-button {
+    display: block;
 
-  padding: 16px 30px;
+    width: auto;
 
-  border-radius: 14px;
+    min-height: 52px;
 
-  background: #eeeeef;
+    padding:
+        15px
+        28px;
 
-  color: #070709;
+    border-radius: 14px;
 
-  font-weight: 700;
+    background:
+        linear-gradient(
+            135deg,
+            #f1f1f3,
+            #d9d9de
+        );
 
-  font-size: 15px;
-}
+    color: #060608;
 
-button:active {
+    font-size: 15px;
 
-  transform: scale(0.96);
+    font-weight: 700;
 
-}
+    box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, 0.25);
 
-
-/* =========================
-   JOURNEY
-========================= */
-
-.top {
-
-  position: absolute;
-
-  top: 22px;
-
-  left: 20px;
-  right: 20px;
-
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: center;
-
-  color: #777b89;
-
-  font-size: 12px;
+    transition:
+        transform 0.15s ease,
+        filter 0.15s ease;
 }
 
 
-.back,
-.sound {
+.primary-button:active {
+    transform: scale(0.97);
 
-  background: transparent;
-
-  color: #aaaeba;
-
-  font-size: 28px;
-
-  width: 42px;
-  height: 42px;
+    filter: brightness(0.92);
 }
 
 
-.progress {
+/* ==========================================
+   TOP BAR
+========================================== */
 
-  position: absolute;
+.top-bar {
+    position: absolute;
 
-  top: 75px;
+    top: 18px;
 
-  left: 20px;
-  right: 20px;
+    left: 18px;
+    right: 18px;
 
-  height: 2px;
+    z-index: 20;
 
-  background: #191b22;
+    display: flex;
 
-  border-radius: 10px;
+    align-items: center;
+
+    justify-content: space-between;
+
+    height: 44px;
 }
 
 
-#progressBar {
+.icon-button {
+    display: flex;
 
-  width: 0%;
+    align-items: center;
 
-  height: 100%;
+    justify-content: center;
 
-  background: #dddddf;
+    width: 42px;
+    height: 42px;
 
-  transition: width 0.6s ease;
+    border-radius: 12px;
+
+    background: transparent;
+
+    color: #979aa7;
+
+    font-size: 24px;
+
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease;
 }
 
 
-.content {
+.icon-button:active {
+    transform: scale(0.92);
 
-  width: 100%;
-
-  max-width: 650px;
-
-  margin: auto;
+    background: rgba(
+        255,
+        255,
+        255,
+        0.06
+    );
 }
 
 
-.content h2 {
+.chapter {
+    color: #777b88;
 
-  font-size: clamp(
-    35px,
-    9vw,
-    65px
-  );
+    font-size: 11px;
 
-  line-height: 1.05;
+    letter-spacing: 2px;
+}
 
-  margin-bottom: 25px;
+
+/* ==========================================
+   PROGRESS
+========================================== */
+
+.progress-container {
+    position: absolute;
+
+    top: 72px;
+
+    left: 20px;
+    right: 20px;
+
+    height: 2px;
+
+    overflow: hidden;
+
+    border-radius: 10px;
+
+    background: #191b22;
+}
+
+
+.progress-bar {
+    width: 0;
+
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: #dedee2;
+
+    transition:
+        width 0.4s
+        cubic-bezier(
+            0.22,
+            0.61,
+            0.36,
+            1
+        );
+}
+
+
+/* ==========================================
+   STAGE
+========================================== */
+
+.stage-content {
+    width: 100%;
+
+    max-width: 650px;
+
+    margin: auto;
+}
+
+
+.stage-content h2 {
+    margin-bottom: 22px;
+
+    color: #eeeeef;
+
+    font-size:
+        clamp(
+            36px,
+            9vw,
+            64px
+        );
+
+    line-height: 1.05;
+
+    letter-spacing: -1.5px;
 }
 
 
 #stageText {
+    margin-bottom: 27px;
 
-  color: #a4a7b1;
+    color: #a2a5af;
 
-  font-size: 17px;
+    font-size: 17px;
 
-  line-height: 1.9;
-
-  margin-bottom: 30px;
+    line-height: 1.9;
 }
 
 
-/* =========================
+/* ==========================================
    CHOICES
-========================= */
+========================================== */
+
+.choices {
+    width: 100%;
+}
+
 
 .choice {
+    display: block;
 
-  width: 100%;
+    width: 100%;
 
-  display: block;
+    margin-bottom: 10px;
 
-  text-align: right;
+    padding:
+        16px
+        17px;
 
-  padding: 17px;
+    border:
+        1px solid
+        #252832;
 
-  margin-bottom: 10px;
+    border-radius: 15px;
 
-  border-radius: 15px;
+    background:
+        rgba(
+            13,
+            15,
+            21,
+            0.88
+        );
 
-  border: 1px solid #252832;
+    color: #e4e5e9;
 
-  background: #0d0f15;
+    text-align: right;
 
-  color: #e6e6ea;
+    font-size: 15px;
 
-  font-size: 15px;
+    line-height: 1.65;
 
-  line-height: 1.6;
+    transition:
+        transform 0.14s ease,
+        background 0.14s ease,
+        border-color 0.14s ease;
 }
 
 
-.choice:hover {
-
-  background: #151822;
-
-  border-color: #505563;
-
+.choice:active {
+    transform: scale(0.985);
 }
 
 
 .choice.selected {
+    background: #e8e8eb;
 
-  background: #e8e8eb;
+    border-color: #e8e8eb;
 
-  color: #050507;
-
-  border-color: #e8e8eb;
+    color: #050507;
 }
 
 
-.continue {
+.continue-button {
+    width: 100%;
 
-  width: 100%;
+    margin-top: 8px;
 
-  padding: 16px;
-
-  border-radius: 14px;
-
-  background: #eeeeef;
-
-  color: #050507;
-
-  font-weight: 700;
-
-  margin-top: 15px;
-
-  display: none;
+    display: none;
 }
 
 
-/* =========================
-   END
-========================= */
+/* ==========================================
+   ENDING
+========================================== */
 
-.endingContent {
+.ending-content {
+    width: 100%;
 
-  width: 100%;
+    max-width: 650px;
 
-  max-width: 600px;
-
-  margin: auto;
+    margin: auto;
 }
 
 
-.endingContent h1 {
+.ending-content h1 {
+    margin-bottom: 25px;
 
-  margin-bottom: 25px;
+    color: #eeeeef;
+
+    font-size:
+        clamp(
+            43px,
+            11vw,
+            76px
+        );
+
+    line-height: 1.03;
+
+    letter-spacing: -2px;
 }
 
 
-.endingContent p:not(.small) {
+.ending-content p:not(.eyebrow) {
+    max-width: 550px;
 
-  color: #999ca8;
+    margin-bottom: 30px;
 
-  line-height: 1.9;
+    color: #999ca7;
 
-  margin-bottom: 30px;
+    font-size: 17px;
 
-  font-size: 17px;
+    line-height: 1.9;
 }
 
 
-/* =========================
-   ANIMATION
-========================= */
+/* ==========================================
+   SETTINGS OVERLAY
+========================================== */
 
-@keyframes screenIn {
+.settings-overlay {
+    position: fixed;
 
-  from {
+    inset: 0;
+
+    z-index: 100;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: center;
+
+    background:
+        rgba(
+            0,
+            0,
+            0,
+            0.48
+        );
 
     opacity: 0;
 
-    transform:
-      translateY(25px)
-      scale(0.98);
+    visibility: hidden;
 
-    filter: blur(10px);
-  }
+    pointer-events: none;
 
-  to {
-
-    opacity: 1;
-
-    transform:
-      translateY(0)
-      scale(1);
-
-    filter: blur(0);
-  }
+    transition:
+        opacity 0.2s ease,
+        visibility 0.2s ease;
 }
 
 
-@keyframes screenOut {
-
-  from {
-
+.settings-overlay.active {
     opacity: 1;
 
-    transform: translateY(0);
+    visibility: visible;
 
-    filter: blur(0);
-  }
+    pointer-events: auto;
+}
 
-  to {
+
+/* ==========================================
+   SETTINGS SHEET
+========================================== */
+
+.settings-sheet {
+    width: 100%;
+
+    max-width: 700px;
+
+    padding:
+        22px
+        20px
+        30px;
+
+    border-top:
+        1px solid
+        #292d38;
+
+    border-radius:
+        24px
+        24px
+        0
+        0;
+
+    background:
+        linear-gradient(
+            180deg,
+            #10121a,
+            #090a0f
+        );
+
+    transform:
+        translateY(25px);
+
+    transition:
+        transform
+        0.24s
+        cubic-bezier(
+            0.22,
+            0.61,
+            0.36,
+            1
+        );
+}
+
+
+.settings-overlay.active
+.settings-sheet {
+    transform:
+        translateY(0);
+}
+
+
+/* ==========================================
+   SETTINGS HEADER
+========================================== */
+
+.settings-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 15px;
+}
+
+
+.settings-header h3 {
+    color: #eeeeef;
+
+    font-size: 20px;
+}
+
+
+.close-button {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 40px;
+    height: 40px;
+
+    border-radius: 10px;
+
+    background: transparent;
+
+    color: #9296a4;
+
+    font-size: 28px;
+}
+
+
+.close-button:active {
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.06
+        );
+}
+
+
+/* ==========================================
+   SETTINGS ROW
+========================================== */
+
+.setting {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    min-height: 70px;
+
+    padding:
+        16px
+        0;
+
+    border-bottom:
+        1px solid
+        #1c1f27;
+}
+
+
+.setting:last-child {
+    border-bottom: 0;
+}
+
+
+.setting-info {
+    min-width: 0;
+}
+
+
+.setting-info strong {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #e5e6eb;
+
+    font-size: 15px;
+}
+
+
+.setting-info small {
+    display: block;
+
+    color: #707481;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+.toggle-button {
+    flex-shrink: 0;
+
+    min-width: 72px;
+
+    padding:
+        9px
+        12px;
+
+    border-radius: 10px;
+
+    background: #e7e7ea;
+
+    color: #08090c;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+/* ==========================================
+   TOAST
+========================================== */
+
+.toast {
+    position: fixed;
+
+    left: 50%;
+
+    bottom: 25px;
+
+    z-index: 200;
+
+    max-width: 85%;
+
+    padding:
+        10px
+        16px;
+
+    border-radius: 12px;
+
+    background: #eeeeef;
+
+    color: #070709;
+
+    font-size: 13px;
+
+    white-space: nowrap;
 
     opacity: 0;
 
-    transform: translateY(-20px);
+    pointer-events: none;
 
-    filter: blur(10px);
-  }
+    transform:
+        translate(
+            -50%,
+            15px
+        );
+
+    transition:
+        opacity 0.18s ease,
+        transform 0.18s ease;
 }
 
 
-/* =========================
+.toast.show {
+    opacity: 1;
+
+    transform:
+        translate(
+            -50%,
+            0
+        );
+}
+
+
+/* ==========================================
+   CINEMATIC ANIMATIONS
+========================================== */
+
+@keyframes screenEnter {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(7px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+
+@keyframes screenLeave {
+
+    from {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+
+    to {
+        opacity: 0;
+
+        transform:
+            translateY(-5px);
+    }
+}
+
+
+/* ==========================================
+   REDUCED MOTION
+========================================== */
+
+body.reduce-motion
+.screen.active {
+
+    animation: none;
+}
+
+
+body.reduce-motion
+#journey.leaving {
+
+    animation: none;
+}
+
+
+body.reduce-motion
+* {
+
+    transition: none !important;
+}
+
+
+/* ==========================================
    MOBILE
-========================= */
+========================================== */
 
 @media (max-width: 480px) {
 
-  .screen {
+    .screen {
+        padding:
+            25px
+            17px;
+    }
 
-    padding:
-      25px
-      17px;
-  }
 
-  h1 {
+    .brand {
+        top: 24px;
 
-    font-size: 43px;
-  }
+        left: 19px;
 
-  .content h2 {
+        font-size: 13px;
+    }
 
-    font-size: 39px;
-  }
 
-  #stageText {
+    .home-content h1 {
+        font-size: 43px;
 
-    font-size: 16px;
-  }
+        letter-spacing: -1.5px;
+    }
+
+
+    .intro-text {
+        font-size: 15px;
+
+        line-height: 1.85;
+    }
+
+
+    .stage-content h2 {
+        font-size: 39px;
+    }
+
+
+    #stageText {
+        font-size: 16px;
+
+        line-height: 1.85;
+    }
+
+
+    .choice {
+        padding: 15px;
+
+        font-size: 14px;
+    }
+
+
+    .settings-sheet {
+        padding-bottom: 27px;
+    }
 
 }
 
 
+/* ==========================================
+   SMALL HEIGHT DEVICES
+========================================== */
+
 @media (
-  prefers-reduced-motion: reduce
+    max-height: 650px
 ) {
 
-  * {
+    .home-content h1 {
+        font-size: 38px;
 
-    animation-duration: 0.01ms !important;
+        margin-bottom: 17px;
+    }
 
-    transition-duration: 0.01ms !important;
-  }
+
+    .intro-text {
+        margin-bottom: 20px;
+
+        font-size: 14px;
+    }
+
+
+    .stage-content h2 {
+        font-size: 35px;
+
+        margin-bottom: 15px;
+    }
+
+
+    #stageText {
+        margin-bottom: 18px;
+
+        font-size: 14px;
+    }
+
+
+    .choice {
+        margin-bottom: 7px;
+
+        padding: 12px;
+    }
+
+}
+
+
+/* ==========================================
+   ACCESSIBILITY
+========================================== */
+
+@media (
+    prefers-reduced-motion: reduce
+) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation-duration:
+            0.01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+
+        transition-duration:
+            0.01ms !important;
+
+        scroll-behavior:
+            auto !important;
+    }
 
 }
