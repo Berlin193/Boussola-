@@ -1,967 +1,298 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    >
-
-    <meta name="theme-color" content="#05050d">
-
-    <title>BOUSSOLA</title>
-
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#080a0f">
+  <title>BOUSSOLA — البوصلة</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
 </head>
 
 <body>
 
 <div id="app">
 
-    <div class="background-glow glow-one"></div>
-    <div class="background-glow glow-two"></div>
+  <div class="ambient"></div>
+  <div class="grain"></div>
 
-    <!-- =========================
-         HOME
-    ========================== -->
+  <!-- الرئيسية -->
+  <section id="home" class="screen active">
 
-    <section id="home" class="screen active">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">◈</span>
+        <div>
+          <b>BOUSSOLA</b>
+          <small>اكتشف اتجاهك</small>
+        </div>
+      </div>
 
-        <header class="top-bar">
+      <button class="icon-btn" id="soundBtn">◉</button>
+    </header>
 
-            <button class="icon-button" id="homeSettings">
-                ⚙
-            </button>
+    <main class="hero">
 
-            <div class="brand">
-                B O U S S O L A
-            </div>
+      <div class="orb">
+        <div class="orb-inner">
+          <span>◈</span>
+        </div>
+      </div>
 
-        </header>
+      <p class="eyebrow">رحلة إلى الداخل</p>
 
+      <h1>
+        إلى أين<br>
+        <span>تتجه؟</span>
+      </h1>
 
-        <div class="hero">
+      <p class="hero-text">
+        ليست لعبة. وليست اختبارًا.
+        إنها مجموعة من الأسئلة ستجعلك تنظر إلى نفسك بطريقة مختلفة.
+      </p>
 
-            <div class="compass">
+      <button class="primary-btn" id="startBtn">
+        <span>ابدأ الرحلة</span>
+        <b>←</b>
+      </button>
 
-                <div class="compass-ring ring-outer"></div>
-                <div class="compass-ring ring-middle"></div>
-                <div class="compass-ring ring-inner"></div>
-
-                <div class="compass-ray ray-one"></div>
-                <div class="compass-ray ray-two"></div>
-
-                <div class="compass-core">
-                    ✦
-                </div>
-
-            </div>
-
-
-            <div class="hero-content">
-
-                <span class="eyebrow">
-                    رحلة لاكتشاف ذاتك
-                </span>
-
-                <h1>
-                    BOUSSOLA
-                </h1>
-
-                <p>
-                    كل اختيار منك يفتح طريقًا جديدًا
-                </p>
-
-            </div>
-
-
-            <div class="progress-preview">
-
-                <div class="progress-info">
-
-                    <span>
-                        تقدم رحلتك
-                    </span>
-
-                    <strong>
-                        12%
-                    </strong>
-
-                </div>
-
-                <div class="progress-line">
-                    <span></span>
-                </div>
-
-            </div>
-
-
-            <button
-                id="startJourney"
-                class="primary-button"
-            >
-
-                <span>
-                    ابدأ الرحلة
-                </span>
-
-                <b>
-                    ←
-                </b>
-
-            </button>
-
-
-            <p class="hero-note">
-                كل إجابة تقربك خطوة من نفسك
-            </p>
-
+      <div class="home-info">
+        <div>
+          <strong id="homeProgress">0%</strong>
+          <small>التقدم</small>
         </div>
 
-    </section>
-
-
-    <!-- =========================
-         CHAPTERS
-    ========================== -->
-
-    <section id="chapters" class="screen">
-
-        <header class="page-top">
-
-            <button
-                class="simple-button"
-                data-back="home"
-            >
-                ☰
-            </button>
-
-            <div class="page-title">
-
-                <h2>
-                    الفصول
-                </h2>
-
-                <p>
-                    رحلتك تتكون من فصول
-                </p>
-
-            </div>
-
-            <button class="simple-button">
-                ☷
-            </button>
-
-        </header>
-
-
-        <main class="page-content">
-
-            <div class="section-heading">
-
-                <span>
-                    كل فصل يفتح طريقًا جديدًا
-                </span>
-
-                <h3>
-                    اكتشف ما ينتظرك
-                </h3>
-
-            </div>
-
-
-            <div class="chapters">
-
-                <article class="chapter-card unlocked">
-
-                    <div class="chapter-icon">
-                        01
-                    </div>
-
-                    <div class="chapter-info">
-
-                        <h4>
-                            البداية
-                        </h4>
-
-                        <p>
-                            الاختيارات الأولى
-                        </p>
-
-                    </div>
-
-                    <strong>
-                        12%
-                    </strong>
-
-                    <div class="card-progress">
-                        <span style="width:12%"></span>
-                    </div>
-
-                </article>
-
-
-                <article class="chapter-card">
-
-                    <div class="chapter-icon">
-                        02
-                    </div>
-
-                    <div class="chapter-info">
-
-                        <h4>
-                            الخوف
-                        </h4>
-
-                        <p>
-                            الأشياء التي لا نقولها
-                        </p>
-
-                    </div>
-
-                    <strong>
-                        0%
-                    </strong>
-
-                </article>
-
-
-                <article class="chapter-card locked">
-
-                    <div class="chapter-icon">
-                        03
-                    </div>
-
-                    <div class="chapter-info">
-
-                        <h4>
-                            العقل
-                        </h4>
-
-                        <p>
-                            الصراع الداخلي
-                        </p>
-
-                    </div>
-
-                    <span class="lock">
-                        🔒
-                    </span>
-
-                </article>
-
-
-                <article class="chapter-card locked">
-
-                    <div class="chapter-icon">
-                        04
-                    </div>
-
-                    <div class="chapter-info">
-
-                        <h4>
-                            السقوط
-                        </h4>
-
-                        <p>
-                            عندما لا تسير الأمور كما تريد
-                        </p>
-
-                    </div>
-
-                    <span class="lock">
-                        🔒
-                    </span>
-
-                </article>
-
-
-                <article class="chapter-card locked">
-
-                    <div class="chapter-icon">
-                        05
-                    </div>
-
-                    <div class="chapter-info">
-
-                        <h4>
-                            النهوض
-                        </h4>
-
-                        <p>
-                            التغيير والمجازفة من جديد
-                        </p>
-
-                    </div>
-
-                    <span class="lock">
-                        🔒
-                    </span>
-
-                </article>
-
-
-                <article class="chapter-card locked">
-
-                    <div class="chapter-icon">
-                        06
-                    </div>
-
-                    <div class="chapter-info">
-
-                        <h4>
-                            الطموح
-                        </h4>
-
-                        <p>
-                            النجاح وما وراءه
-                        </p>
-
-                    </div>
-
-                    <span class="lock">
-                        🔒
-                    </span>
-
-                </article>
-
-            </div>
-
-        </main>
-
-
-        <nav class="bottom-nav">
-
-            <button data-screen="home">
-                <span>⌂</span>
-                الرئيسية
-            </button>
-
-            <button class="active">
-                <span>◇</span>
-                الفصول
-            </button>
-
-            <button data-screen="journey">
-                <span>♢</span>
-                رحلتي
-            </button>
-
-            <button id="settingsFromChapters">
-                <span>⚙</span>
-                الإعدادات
-            </button>
-
-        </nav>
-
-    </section>
-
-
-    <!-- =========================
-         JOURNEY
-    ========================== -->
-
-    <section id="journey" class="screen">
-
-        <header class="journey-top">
-
-            <button
-                class="simple-button"
-                data-back="chapters"
-            >
-                ←
-            </button>
-
-            <div>
-
-                <span>
-                    الفصل الأول
-                </span>
-
-                <strong>
-                    البداية
-                </strong>
-
-            </div>
-
-            <small>
-                01 / 08
-            </small>
-
-        </header>
-
-
-        <div class="story-progress">
-
-            <i class="active"></i>
-            <i class="active"></i>
-            <i class="active"></i>
-            <i></i>
-            <i></i>
-            <i></i>
-            <i></i>
-            <i></i>
-
+        <div>
+          <strong>60</strong>
+          <small>مرحلة</small>
         </div>
 
+        <div>
+          <strong>6</strong>
+          <small>فصول</small>
+        </div>
+      </div>
 
-        <div class="story-scene">
+    </main>
 
-            <div class="portal-glow"></div>
+    <footer>
+      <button data-screen="map">الخريطة</button>
+      <button data-screen="profile">رحلتي</button>
+      <button id="settingsOpen">الإعدادات</button>
+    </footer>
 
-            <div class="mountain mountain-one"></div>
-            <div class="mountain mountain-two"></div>
+  </section>
 
-            <div class="person">
-                ●
-            </div>
 
+  <!-- الخريطة -->
+  <section id="map" class="screen">
+
+    <header class="page-header">
+      <button class="back-btn" data-screen="home">→</button>
+      <div>
+        <small>BOUSSOLA</small>
+        <h2>خريطة الرحلة</h2>
+      </div>
+    </header>
+
+    <div class="map-intro">
+      <span>رحلتك</span>
+      <strong id="mapProgress">0%</strong>
+    </div>
+
+    <div id="mapNodes" class="map-nodes"></div>
+
+  </section>
+
+
+  <!-- الرحلة -->
+  <section id="journey" class="screen">
+
+    <header class="journey-header">
+
+      <button class="back-btn" id="journeyBack">→</button>
+
+      <div class="chapter-info">
+        <small id="chapterLabel">الفصل الأول</small>
+        <strong id="chapterTitle">البداية</strong>
+      </div>
+
+      <div class="stage-number">
+        <span id="stageCurrent">01</span>
+        <small>/60</small>
+      </div>
+
+    </header>
+
+    <div class="journey-progress">
+      <span id="progressBar"></span>
+    </div>
+
+    <main class="question-area">
+
+      <div class="question-symbol" id="questionSymbol">?</div>
+
+      <p class="stage-label">المرحلة <span id="stageLabel">01</span></p>
+
+      <h1 id="questionTitle">
+        السؤال
+      </h1>
+
+      <p id="questionDescription">
+        استمع إلى السؤال جيدًا.
+      </p>
+
+      <div id="answers" class="answers"></div>
+
+      <div class="ai-box">
+
+        <div class="ai-avatar">
+          ◈
         </div>
 
-
-        <div class="question">
-
-            <span class="stage">
-                المرحلة 01
-            </span>
-
-            <h2>
-                ماذا تبحث<br>
-                عنه الآن؟
-            </h2>
-
-            <p>
-                اختر ما يعبر عنك أكثر
-            </p>
-
-
-            <div class="answers">
-
-                <button class="answer">
-                    <span class="answer-icon">
-                        ◇
-                    </span>
-
-                    <span>
-                        الأمان
-                    </span>
-
-                    <b>
-                        →
-                    </b>
-                </button>
-
-
-                <button class="answer">
-                    <span class="answer-icon star">
-                        ★
-                    </span>
-
-                    <span>
-                        النجاح
-                    </span>
-
-                    <b>
-                        →
-                    </b>
-                </button>
-
-
-                <button class="answer">
-                    <span class="answer-icon question-mark">
-                        ?
-                    </span>
-
-                    <span>
-                        المجهول
-                    </span>
-
-                    <b>
-                        →
-                    </b>
-                </button>
-
-            </div>
-
+        <div>
+          <small>البوصلة</small>
+          <p id="aiMessage">
+            أنا هنا. لا تحاول اختيار الإجابة المثالية.
+          </p>
         </div>
 
-    </section>
+      </div>
+
+    </main>
+
+  </section>
 
 
-    <!-- =========================
-         MAP
-    ========================== -->
+  <!-- النتيجة -->
+  <section id="profile" class="screen">
 
-    <section id="map" class="screen">
+    <header class="page-header">
+      <button class="back-btn" data-screen="home">→</button>
+      <div>
+        <small>BOUSSOLA</small>
+        <h2>رحلتك</h2>
+      </div>
+    </header>
 
-        <header class="page-top">
+    <main class="profile-content">
 
-            <button
-                class="simple-button"
-                data-back="home"
-            >
-                ←
-            </button>
+      <div class="result-orb">
+        <span id="resultIcon">◈</span>
+      </div>
 
-            <div class="page-title">
+      <p class="eyebrow">تحليل البوصلة</p>
 
-                <h2>
-                    خريطة رحلتك
-                </h2>
+      <h1 id="resultTitle">
+        لم تبدأ الرحلة بعد
+      </h1>
 
-                <p>
-                    الطريق الذي صنعته اختياراتك
-                </p>
+      <p id="resultDescription">
+        ابدأ الرحلة لتكتشف اتجاهك.
+      </p>
 
-            </div>
+      <div class="stats">
 
-            <button class="simple-button">
-                ☷
-            </button>
-
-        </header>
-
-
-        <div class="journey-map">
-
-            <div class="map-line line-a"></div>
-            <div class="map-line line-b"></div>
-            <div class="map-line line-c"></div>
-            <div class="map-line line-d"></div>
-
-
-            <div class="map-node node-start active">
-                <span>✦</span>
-                <small>البداية</small>
-            </div>
-
-
-            <div class="map-node node-fear">
-                <span>♧</span>
-                <small>الخوف</small>
-            </div>
-
-
-            <div class="map-node node-mind">
-                <span>♢</span>
-                <small>العقل</small>
-            </div>
-
-
-            <div class="map-node node-fall">
-                <span>♧</span>
-                <small>السقوط</small>
-            </div>
-
-
-            <div class="map-node node-rise">
-                <span>✧</span>
-                <small>النهوض</small>
-            </div>
-
-
-            <div class="map-node node-dream">
-                <span>★</span>
-                <small>الطموح</small>
-            </div>
-
-
-            <div class="map-node node-unknown locked-node">
-                <span>?</span>
-                <small>المجهول</small>
-            </div>
-
-
-            <div class="map-node node-destiny locked-node">
-                <span>♢</span>
-                <small>المصير</small>
-            </div>
-
+        <div class="stat">
+          <div>
+            <span>الشجاعة</span>
+            <b id="courageStat">0%</b>
+          </div>
+          <div class="stat-bar">
+            <i id="courageBar"></i>
+          </div>
         </div>
 
-
-        <nav class="bottom-nav">
-
-            <button data-screen="home">
-                <span>⌂</span>
-                الرئيسية
-            </button>
-
-            <button data-screen="chapters">
-                <span>◇</span>
-                الفصول
-            </button>
-
-            <button class="active">
-                <span>♢</span>
-                رحلتي
-            </button>
-
-            <button id="settingsFromMap">
-                <span>⚙</span>
-                الإعدادات
-            </button>
-
-        </nav>
-
-    </section>
-
-
-    <!-- =========================
-         PROFILE
-    ========================== -->
-
-    <section id="profile" class="screen">
-
-        <header class="page-top">
-
-            <button
-                class="simple-button"
-                data-back="home"
-            >
-                ←
-            </button>
-
-            <div class="page-title">
-
-                <h2>
-                    رحلتي
-                </h2>
-
-                <p>
-                    ما اكتشفناه عنك حتى الآن
-                </p>
-
-            </div>
-
-            <button class="simple-button">
-                ↗
-            </button>
-
-        </header>
-
-
-        <main class="profile-content">
-
-            <div class="identity-card">
-
-                <div class="identity-icon">
-                    ✦
-                </div>
-
-                <div>
-
-                    <span>
-                        نمط رحلتك
-                    </span>
-
-                    <h3>
-                        المستكشف
-                    </h3>
-
-                    <p>
-                        فضولك يدفعك للبحث عن معنى
-                        أعمق لما يحدث حولك.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="section-title">
-                مؤشراتك الحالية
-            </div>
-
-
-            <div class="stats">
-
-                <div class="stat">
-
-                    <div class="stat-head">
-                        <span>الطموح</span>
-                        <b>65%</b>
-                    </div>
-
-                    <div class="stat-bar">
-                        <span style="width:65%"></span>
-                    </div>
-
-                </div>
-
-
-                <div class="stat">
-
-                    <div class="stat-head">
-                        <span>الشجاعة</span>
-                        <b>40%</b>
-                    </div>
-
-                    <div class="stat-bar blue">
-                        <span style="width:40%"></span>
-                    </div>
-
-                </div>
-
-
-                <div class="stat">
-
-                    <div class="stat-head">
-                        <span>الفضول</span>
-                        <b>80%</b>
-                    </div>
-
-                    <div class="stat-bar">
-                        <span style="width:80%"></span>
-                    </div>
-
-                </div>
-
-
-                <div class="stat">
-
-                    <div class="stat-head">
-                        <span>التغيير</span>
-                        <b>55%</b>
-                    </div>
-
-                    <div class="stat-bar green">
-                        <span style="width:55%"></span>
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="completed-card">
-
-                <span>
-                    عدد المراحل المكتملة
-                </span>
-
-                <strong>
-                    08
-                </strong>
-
-                <div class="mini-chart">
-
-                    <i></i>
-                    <i></i>
-                    <i></i>
-                    <i></i>
-                    <i></i>
-                    <i></i>
-
-                </div>
-
-            </div>
-
-        </main>
-
-
-        <nav class="bottom-nav">
-
-            <button data-screen="home">
-                <span>⌂</span>
-                الرئيسية
-            </button>
-
-            <button data-screen="chapters">
-                <span>◇</span>
-                الفصول
-            </button>
-
-            <button class="active">
-                <span>♢</span>
-                رحلتي
-            </button>
-
-            <button id="settingsFromProfile">
-                <span>⚙</span>
-                الإعدادات
-            </button>
-
-        </nav>
-
-    </section>
-
-
-    <!-- =========================
-         SETTINGS
-    ========================== -->
-
-    <div id="settings" class="settings-overlay">
-
-        <div class="settings-panel">
-
-            <div class="settings-handle"></div>
-
-            <div class="settings-header">
-
-                <div>
-
-                    <span>
-                        BOUSSOLA
-                    </span>
-
-                    <h2>
-                        الإعدادات
-                    </h2>
-
-                </div>
-
-                <button id="closeSettings">
-                    ×
-                </button>
-
-            </div>
-
-
-            <div class="settings-section">
-
-                <small>
-                    التجربة
-                </small>
-
-
-                <div class="setting">
-
-                    <div class="setting-icon">
-                        ♫
-                    </div>
-
-                    <div class="setting-text">
-
-                        <strong>
-                            الموسيقى الخلفية
-                        </strong>
-
-                        <span>
-                            أجواء صوتية أثناء الرحلة
-                        </span>
-
-                    </div>
-
-                    <label class="switch">
-
-                        <input
-                            type="checkbox"
-                            id="musicSwitch"
-                            checked
-                        >
-
-                        <span></span>
-
-                    </label>
-
-                </div>
-
-
-                <div class="setting">
-
-                    <div class="setting-icon">
-                        ◌
-                    </div>
-
-                    <div class="setting-text">
-
-                        <strong>
-                            تقليل الحركة
-                        </strong>
-
-                        <span>
-                            انتقالات أخف للأجهزة الضعيفة
-                        </span>
-
-                    </div>
-
-                    <label class="switch">
-
-                        <input
-                            type="checkbox"
-                            id="motionSwitch"
-                        >
-
-                        <span></span>
-
-                    </label>
-
-                </div>
-
-            </div>
-
-
-            <div class="settings-section">
-
-                <small>
-                    البيانات والخصوصية
-                </small>
-
-
-                <div class="setting clickable">
-
-                    <div class="setting-icon">
-                        ✓
-                    </div>
-
-                    <div class="setting-text">
-
-                        <strong>
-                            حفظ التقدم
-                        </strong>
-
-                        <span>
-                            رحلتك محفوظة تلقائيًا
-                        </span>
-
-                    </div>
-
-                    <b>
-                        ›
-                    </b>
-
-                </div>
-
-
-                <div class="setting clickable">
-
-                    <div class="setting-icon">
-                        ♧
-                    </div>
-
-                    <div class="setting-text">
-
-                        <strong>
-                            الخصوصية
-                        </strong>
-
-                        <span>
-                            تحكم في بيانات رحلتك
-                        </span>
-
-                    </div>
-
-                    <b>
-                        ›
-                    </b>
-
-                </div>
-
-            </div>
-
-
-            <div class="settings-section">
-
-                <small>
-                    أخرى
-                </small>
-
-
-                <div class="setting clickable">
-
-                    <div class="setting-icon">
-                        ◉
-                    </div
+        <div class="stat">
+          <div>
+            <span>الطموح</span>
+            <b id="ambitionStat">0%</b>
+          </div>
+          <div class="stat-bar">
+            <i id="ambitionBar"></i>
+          </div>
+        </div>
+
+        <div class="stat">
+          <div>
+            <span>الفضول</span>
+            <b id="curiosityStat">0%</b>
+          </div>
+          <div class="stat-bar">
+            <i id="curiosityBar"></i>
+          </div>
+        </div>
+
+        <div class="stat">
+          <div>
+            <span>التأمل</span>
+            <b id="reflectionStat">0%</b>
+          </div>
+          <div class="stat-bar">
+            <i id="reflectionBar"></i>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="result-message" id="resultMessage">
+        البوصلة لا تخبرك من أنت، بل تساعدك على رؤية نفسك.
+      </div>
+
+      <button class="primary-btn" id="restartBtn">
+        <span>ابدأ رحلة جديدة</span>
+        <b>↻</b>
+      </button>
+
+    </main>
+
+  </section>
+
+
+  <!-- الإعدادات -->
+  <div id="settings" class="modal">
+
+    <div class="modal-card">
+
+      <button class="close-btn" id="settingsClose">×</button>
+
+      <p class="eyebrow">BOUSSOLA</p>
+
+      <h2>الإعدادات</h2>
+
+      <div class="setting-row">
+        <div>
+          <strong>الصوت الغامض</strong>
+          <small>أصوات محيطة أثناء الرحلة</small>
+        </div>
+
+        <label class="switch">
+          <input type="checkbox" id="soundSwitch" checked>
+          <span></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div>
+          <strong>الحركة</strong>
+          <small>الانتقالات والمؤثرات</small>
+        </div>
+
+        <label class="switch">
+          <input type="checkbox" id="motionSwitch" checked>
+          <span></span>
+        </label>
+      </div>
+
+      <button class="danger-btn" id="clearBtn">
+        مسح الرحلة بالكامل
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>
