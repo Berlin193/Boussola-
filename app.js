@@ -987,4 +987,3 @@ function updateProfile() {
 
     const total =
         stats.ambition +
-    
