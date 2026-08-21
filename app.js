@@ -1,970 +1,990 @@
-// ==========================================
-// BOUSSOLA
-// JavaScript Engine
-// Version 0.3.0
-// ==========================================
-
 "use strict";
 
+const screens = {
+    home: document.getElementById("homeScreen"),
+    journey: document.getElementById("journeyScreen"),
+    chapters: document.getElementById("chaptersScreen"),
+    profile: document.getElementById("profileScreen")
+};
 
-// ==========================================
-// 1. بيانات المراحل
-// ==========================================
+const startButton = document.getElementById("startButton");
 
-const stages = [
-
-    {
-        chapter: "الفصل 01",
-        title: "كل شيء يبدأ بسؤال",
-        text:
-            "قبل أن تبحث عن مستقبلك، اسأل نفسك سؤالًا بسيطًا: ماذا تريد فعلًا؟"
-    },
-
-    {
-        chapter: "الفصل 01",
-        title: "ثلاثة أبواب",
-        text:
-            "أمامك ثلاثة أبواب. لا يوجد اختيار صحيح. اختر الباب الذي يجذبك أولًا.",
-        choices: [
-            "الأمان — حياة مستقرة ومخاطرة أقل",
-            "المعرفة — سنة كاملة لتتعلم شيئًا جديدًا",
-            "المجهول — تبدأ طريقًا لا تعرف نهايته"
-        ]
-    },
-
-    {
-        chapter: "الفصل 02",
-        title: "الخوف من الغد",
-        text:
-            "أحيانًا لا نخاف من المستقبل نفسه... بل من احتمال أن نفشل فيه.",
-        choices: [
-            "أخاف أن أفشل",
-            "أخاف أن أضيع وقتي",
-            "أخاف أن أبقى كما أنا"
-        ]
-    },
-
-    {
-        chapter: "الفصل 02",
-        title: "الأمنية",
-        text:
-            "لو اختفى الخوف لمدة دقيقة واحدة فقط... ما أول شيء ستفعله؟",
-        choices: [
-            "أبدأ شيئًا كنت أؤجله",
-            "أخبر شخصًا بما أشعر به",
-            "أغير اتجاه حياتي"
-        ]
-    },
-
-    {
-        chapter: "الفصل 03",
-        title: "الفشل",
-        text:
-            "الفشل ليس دائمًا نهاية الطريق. أحيانًا يكون معلومة لم تكن تملكها قبل أن تبدأ.",
-        choices: [
-            "أحاول مرة أخرى",
-            "أغير الخطة",
-            "أترك الأمر"
-        ]
-    },
-
-    {
-        chapter: "الفصل 03",
-        title: "العقل تحت الضغط",
-        text:
-            "القلق والتفكير الزائد والتسويف قد يؤثرون في طريقة اتخاذ القرارات. هذه المرحلة للتأمل وليست تشخيصًا طبيًا.",
-        choices: [
-            "أفكر كثيرًا قبل أن أبدأ",
-            "أبدأ ثم أقلق",
-            "أؤجل حتى أشعر أنني مستعد"
-        ]
-    },
-
-    {
-        chapter: "الفصل 04",
-        title: "ماذا لو؟",
-        text:
-            "تخيل أنك عدت خمس سنوات إلى الوراء. ما القرار الذي كنت تتمنى لو اتخذته؟",
-        choices: [
-            "التعلم",
-            "العمل",
-            "الشجاعة في اتخاذ قرار"
-        ]
-    },
-
-    {
-        chapter: "الفصل 04",
-        title: "المستقبل",
-        text:
-            "تخيل حياتك بعد خمس سنوات إذا لم تغير أي شيء من عاداتك الحالية.",
-        choices: [
-            "هذا يخيفني",
-            "هذا يطمئنني",
-            "لا أستطيع تخيله"
-        ]
-    },
-
-    {
-        chapter: "الفصل 05",
-        title: "المرآة",
-        text:
-            "هناك فرق بين الشخص الذي تراه أمام الناس... والشخص الذي تعرفه عندما تكون وحدك.",
-        choices: [
-            "أعرف نفسي جيدًا",
-            "ما زلت أبحث عن نفسي",
-            "أحيانًا لا أعرف ماذا أريد"
-        ]
-    },
-
-    {
-        chapter: "الفصل 05",
-        title: "النمط",
-        text:
-            "اختياراتك بدأت تكشف نمطًا. لكن النمط ليس حكمًا عليك؛ يمكنك تغييره.",
-        choices: [
-            "أريد معرفة النمط",
-            "أريد أن أغيره",
-            "أريد الاستمرار"
-        ]
-    },
-
-    {
-        chapter: "THE FIRST KEY",
-        title: "المستقبل لم يُكتب",
-        text:
-            "أنت لم تكتشف مستقبلك. أنت اكتشفت طريقة اختيارك. والاختيارات يمكن أن تتغير."
-    }
-
-];
-
-
-// ==========================================
-// 2. حالة التطبيق
-// ==========================================
-
-let currentStage = 0;
-
-let selectedChoice = null;
-
-let musicEnabled = true;
-
-let reducedMotion = false;
-
-
-// ==========================================
-// 3. عناصر الصفحة
-// ==========================================
-
-const homeScreen =
-    document.getElementById("home");
-
-const journeyScreen =
-    document.getElementById("journey");
-
-const endingScreen =
-    document.getElementById("ending");
-
-const startButton =
-    document.getElementById("startButton");
-
-const backButton =
-    document.getElementById("backButton");
-
-const settingsButton =
-    document.getElementById("settingsButton");
+const choicesContainer =
+    document.getElementById("choices");
 
 const continueButton =
     document.getElementById("continueButton");
 
-const restartButton =
-    document.getElementById("restartButton");
+const questionTitle =
+    document.getElementById("questionTitle");
 
-const settingsPanel =
-    document.getElementById("settingsPanel");
+const questionText =
+    document.getElementById("questionText");
 
-const closeSettings =
-    document.getElementById("closeSettings");
+const chapterNumber =
+    document.getElementById("chapterNumber");
 
-const musicToggle =
-    document.getElementById("musicToggle");
+const chapterTitle =
+    document.getElementById("chapterTitle");
 
-const motionToggle =
-    document.getElementById("motionToggle");
-
-const chapterElement =
-    document.getElementById("chapter");
-
-const stageNumberElement =
-    document.getElementById("stageNumber");
-
-const stageTitleElement =
-    document.getElementById("stageTitle");
-
-const stageTextElement =
-    document.getElementById("stageText");
-
-const choicesElement =
-    document.getElementById("choices");
+const stageLabel =
+    document.getElementById("stageLabel");
 
 const progressBar =
     document.getElementById("progressBar");
 
-const toastElement =
+const progressText =
+    document.getElementById("progressText");
+
+const chaptersList =
+    document.getElementById("chaptersList");
+
+const settingsOverlay =
+    document.getElementById("settingsOverlay");
+
+const toast =
     document.getElementById("toast");
 
+let currentNode = "start";
 
-// ==========================================
-// 4. قراءة الإعدادات المحفوظة
-// ==========================================
+let selectedChoice = null;
 
-function loadSettings() {
+let musicEnabled =
+    localStorage.getItem("boussola_music") !== "off";
 
-    const savedMusic =
-        localStorage.getItem("boussola_music");
+let reducedMotion =
+    localStorage.getItem("boussola_motion") === "on";
 
-    const savedMotion =
-        localStorage.getItem("boussola_motion");
+const journey = {
+
+    start: {
+
+        chapter: "الفصل الأول",
+
+        chapterTitle: "البداية",
+
+        label: "البداية",
+
+        title: "كل شيء يبدأ بسؤال",
+
+        text:
+            "قبل أن تبحث عن مستقبلك اسأل نفسك ماذا تريد فعلًا؟",
+
+        choices: [
+
+            {
+                text: "أبحث عن الأمان",
+                next: "safety_01",
+                stats: {
+                    ambition: 0,
+                    courage: 1,
+                    curiosity: 0,
+                    change: 1
+                }
+            },
+
+            {
+                text: "أبحث عن النجاح",
+                next: "success_01",
+                stats: {
+                    ambition: 2,
+                    courage: 1,
+                    curiosity: 0,
+                    change: 0
+                }
+            },
+
+            {
+                text: "أبحث عن المجهول",
+                next: "unknown_01",
+                stats: {
+                    ambition: 1,
+                    courage: 2,
+                    curiosity: 2,
+                    change: 2
+                }
+            }
+
+        ]
+
+    },
 
 
-    if (savedMusic !== null) {
+    safety_01: {
 
-        musicEnabled =
-            savedMusic === "on";
+        chapter: "الفصل الأول",
+
+        chapterTitle: "البداية",
+
+        label: "طريق الأمان",
+
+        title: "ماذا تخشى أن تخسر؟",
+
+        text:
+            "أحيانًا لا نبحث عن الأمان لأننا نحبه فقط بل لأن هناك شيئًا نخاف أن نفقده.",
+
+        choices: [
+
+            {
+                text: "الاستقرار",
+                next: "safety_02",
+                stats: {
+                    ambition: 0,
+                    courage: 0,
+                    curiosity: 0,
+                    change: 0
+                }
+            },
+
+            {
+                text: "الأشخاص الذين أحبهم",
+                next: "fear_01",
+                stats: {
+                    ambition: 0,
+                    courage: 1,
+                    curiosity: 1,
+                    change: 0
+                }
+            },
+
+            {
+                text: "نفسي التي أعرفها",
+                next: "mirror_01",
+                stats: {
+                    ambition: 1,
+                    courage: 1,
+                    curiosity: 2,
+                    change: 1
+                }
+            }
+
+        ]
+
+    },
+
+
+    success_01: {
+
+        chapter: "الفصل الأول",
+
+        chapterTitle: "البداية",
+
+        label: "طريق الطموح",
+
+        title: "لو وصلت ماذا بعد؟",
+
+        text:
+            "تخيل أنك وصلت إلى الشيء الذي تحلم به منذ سنوات. ماذا ستفعل بعد ذلك؟",
+
+        choices: [
+
+            {
+                text: "أبحث عن هدف أكبر",
+                next: "ambition_01",
+                stats: {
+                    ambition: 2,
+                    courage: 1,
+                    curiosity: 1,
+                    change: 1
+                }
+            },
+
+            {
+                text: "أعيش بهدوء",
+                next: "safety_02",
+                stats: {
+                    ambition: 0,
+                    courage: 0,
+                    curiosity: 1,
+                    change: 0
+                }
+            },
+
+            {
+                text: "لا أعرف",
+                next: "future_01",
+                stats: {
+                    ambition: 1,
+                    courage: 0,
+                    curiosity: 2,
+                    change: 1
+                }
+            }
+
+        ]
+
+    },
+
+
+    unknown_01: {
+
+        chapter: "الفصل الأول",
+
+        chapterTitle: "البداية",
+
+        label: "طريق المجهول",
+
+        title: "هل تستطيع ألا تعرف؟",
+
+        text:
+            "المجهول لا يخيف الجميع بنفس الطريقة. أحيانًا يكون الخوف الحقيقي هو ألا تعرف إلى أين ستصل.",
+
+        choices: [
+
+            {
+                text: "أجرب حتى لو فشلت",
+                next: "failure_01",
+                stats: {
+                    ambition: 1,
+                    courage: 2,
+                    curiosity: 2,
+                    change: 2
+                }
+            },
+
+            {
+                text: "أحتاج خطة أولًا",
+                next: "mind_01",
+                stats: {
+                    ambition: 1,
+                    courage: 0,
+                    curiosity: 2,
+                    change: 0
+                }
+            },
+
+            {
+                text: "أعود للطريق الآمن",
+                next: "safety_01",
+                stats: {
+                    ambition: 0,
+                    courage: 0,
+                    curiosity: 1,
+                    change: 0
+                }
+            }
+
+        ]
+
+    },
+
+
+    safety_02: {
+
+        chapter: "الفصل الثاني",
+
+        chapterTitle: "الخوف",
+
+        label: "الفصل الثاني",
+
+        title: "ماذا لو تغير كل شيء؟",
+
+        text:
+            "لو تغيرت حياتك فجأة هل ستتمسك بما تعرفه أم تسمح لنفسك بأن تبدأ من جديد؟",
+
+        choices: [
+
+            {
+                text: "أتمسك بما أعرفه",
+                next: "fear_01",
+                stats: {
+                    ambition: 0,
+                    courage: 0,
+                    curiosity: 0,
+                    change: 0
+                }
+            },
+
+            {
+                text: "أحاول التكيف",
+                next: "change_01",
+                stats: {
+                    ambition: 1,
+                    courage: 1,
+                    curiosity: 1,
+                    change: 2
+                }
+            },
+
+            {
+                text: "أبدأ من الصفر",
+                next: "future_01",
+                stats: {
+                    ambition: 2,
+                    courage: 2,
+                    curiosity: 1,
+                    change: 2
+                }
+            }
+
+        ]
+
+    },
+
+
+    fear_01: {
+
+        chapter: "الفصل الثاني",
+
+        chapterTitle: "الخوف",
+
+        label: "الخوف",
+
+        title: "الخوف لا يتحدث بصوت واحد",
+
+        text:
+            "هناك خوف يجعلك تتراجع وخوف آخر يجعلك تستعد وخوف ثالث يجعلك تغير الطريق بالكامل.",
+
+        choices: [
+
+            {
+                text: "أتراجع",
+                next: "mind_01",
+                stats: {
+                    ambition: 0,
+                    courage: 0,
+                    curiosity: 1,
+                    change: 0
+                }
+            },
+
+            {
+                text: "أستعد",
+                next: "future_01",
+                stats: {
+                    ambition: 1,
+                    courage: 1,
+                    curiosity: 2,
+                    change: 1
+                }
+            },
+
+            {
+                text: "أواجهه",
+                next: "failure_01",
+                stats: {
+                    ambition: 1,
+                    courage: 2,
+                    curiosity: 2,
+                    change: 2
+                }
+            }
+
+        ]
+
+    },
+
+
+    mirror_01: {
+
+        chapter: "الفصل الثاني",
+
+        chapterTitle: "الخوف",
+
+        label: "المرآة",
+
+        title: "من أنت عندما لا يراك أحد؟",
+
+        text:
+            "بعيدًا عن توقعات الآخرين توجد نسخة منك لا تحتاج إلى إثبات أي شيء.",
+
+        choices: [
+
+            {
+                text: "أعرفها",
+                next: "mind_01",
+                stats: {
+                    ambition: 1,
+                    courage: 1,
+                    curiosity: 2,
+                    change: 1
+                }
+            },
+
+            {
+                text: "ما زلت أبحث عنها",
+                next: "future_01",
+                stats: {
+                    ambition: 1,
+                    courage: 0,
+                    curiosity: 2,
+                    change: 2
+                }
+            },
+
+            {
+                text: "أخاف منها",
+                next: "fear_01",
+                stats: {
+                    ambition: 0,
+                    courage: 0,
+                    curiosity: 2,
+                    change: 0
+                }
+            }
+
+        ]
+
+    },
+
+
+    ambition_01: {
+
+        chapter: "الفصل الثالث",
+
+        chapterTitle: "الطموح",
+
+        label: "الطموح",
+
+        title: "كم يكفي؟",
+
+        text:
+            "هناك لحظة يصبح فيها الوصول أقل أهمية من السؤال عن سبب رغبتك في الوصول.",
+
+        choices: [
+
+            {
+                text: "لن أتوقف",
+                next: "future_01",
+                stats: {
+                    ambition: 2,
+                    courage: 2,
+                    curiosity: 0,
+                    change: 1
+                }
+            },
+
+            {
+                text: "أريد حياة متوازنة",
+                next: "change_01",
+                stats: {
+                    ambition: 1,
+                    courage: 1,
+                    curiosity: 1,
+                    change: 1
+                }
+            },
+
+            {
+                text: "لا أعرف ماذا أريد",
+                next: "mirror_01",
+                stats: {
+                    ambition: 0,
+                    courage: 0,
+                    curiosity: 2,
+                    change: 1
+                }
+            }
+
+        ]
+
+    },
+
+
+    future_01: {
+
+        chapter: "الفصل الثالث",
+
+        chapterTitle: "المستقبل",
+
+        label: "المستقبل",
+
+        title: "خمس سنوات من الآن",
+
+        text:
+            "تخيل نفسك بعد خمس سنوات. هل تخاف أكثر مما ستصبح عليه أم مما قد لا تصبح عليه؟",
+
+        choices: [
+
+            {
+                text: "أخاف أن أفشل",
+                next: "failure_01",
+                stats: {
+                    ambition: 1,
+                    courage: 0,
+                    curiosity: 1,
+                    change: 1
+                }
+            },
+
+            {
+                text: "أخاف أن أبقى كما أنا",
+                next: "change_01",
+                stats: {
+                    ambition: 1,
+                    courage: 1,
+                    curiosity: 1,
+                    change: 2
+                }
+            },
+
+            {
+                text: "متحمس لما سيحدث",
+                next: "ambition_01",
+                stats: {
+                    ambition: 2,
+                    courage: 2,
+                    curiosity: 2,
+                    change: 2
+                }
+            }
+
+        ]
+
+    },
+
+
+    failure_01: {
+
+        chapter: "الفصل الرابع",
+
+        chapterTitle: "السقوط",
+
+        label: "الفشل",
+
+        title: "لو فشلت الآن",
+
+        text:
+            "الفشل لا يخبرك دائمًا أنك غير قادر. أحيانًا يخبرك أن الطريقة التي استخدمتها لم تكن مناسبة.",
+
+        choices: [
+
+            {
+                text: "أحاول مرة أخرى",
+                next: "change_01",
+                stats: {
+                    ambition: 2,
+                    courage: 2,
+                    curiosity: 1,
+                    change: 2
+                }
+            },
+
+            {
+                text: "أغير الخطة",
+                next: "mind_01",
+                stats: {
+                    ambition: 1,
+                    courage: 1,
+                    curiosity: 2,
+                    change: 2
+                }
+            },
+
+            {
+                text: "أحتاج وقتًا",
+                next: "mirror_01",
+                stats: {
+                    ambition: 0,
+                    courage: 1,
+                    curiosity: 1,
+                    change: 1
+                }
+            }
+
+        ]
+
+    },
+
+
+    mind_01: {
+
+        chapter: "الفصل الرابع",
+
+        chapterTitle: "العقل",
+
+        label: "العقل",
+
+        title: "عندما لا يتوقف التفكير",
+
+        text:
+            "أحيانًا ننتظر اللحظة المثالية حتى لا نرتكب خطأ. لكن الانتظار نفسه قد يصبح قرارًا.",
+
+        choices: [
+
+            {
+                text: "أبدأ رغم عدم اليقين",
+                next: "change_01",
+                stats: {
+                    ambition: 1,
+                    courage: 2,
+                    curiosity: 2,
+                    change: 2
+                }
+            },
+
+            {
+                text: "أجمع معلومات أكثر",
+                next: "future_01",
+                stats: {
+                    ambition: 1,
+                    courage: 0,
+                    curiosity: 2,
+                    change: 1
+                }
+            },
+
+            {
+                text: "أتوقف",
+                next: "fear_01",
+                stats: {
+                    ambition: 0,
+                    courage: 0,
+                    curiosity: 1,
+                    change: 0
+                }
+            }
+
+        ]
+
+    },
+
+
+    change_01: {
+
+        chapter: "الفصل الخامس",
+
+        chapterTitle: "التغيير",
+
+        label: "التغيير",
+
+        title: "قرار صغير",
+
+        text:
+            "ليست كل التغييرات كبيرة. أحيانًا يبدأ طريق جديد بقرار صغير لا يراه أحد غيرك.",
+
+        choices: [
+
+            {
+                text: "أغير شيئًا اليوم",
+                next: "ambition_01",
+                stats: {
+                    ambition: 2,
+                    courage: 2,
+                    curiosity: 1,
+                    change: 2
+                }
+            },
+
+            {
+                text: "أراقب أولًا",
+                next: "mirror_01",
+                stats: {
+                    ambition: 0,
+                    courage: 0,
+                    curiosity: 2,
+                    change: 1
+                }
+            },
+
+            {
+                text: "أحتاج دفعة",
+                next: "failure_01",
+                stats: {
+                    ambition: 1,
+                    courage: 1,
+                    curiosity: 1,
+                    change: 2
+                }
+            }
+
+        ]
 
     }
 
+};
 
-    if (savedMotion !== null) {
 
-        reducedMotion =
-            savedMotion === "reduced";
+let stats = {
+    ambition: 0,
+    courage: 0,
+    curiosity: 0,
+    change: 0
+};
 
+
+function showScreen(name) {
+
+    Object.values(screens).forEach(function(screen) {
+        screen.classList.remove("active");
+    });
+
+    screens[name].classList.add("active");
+
+    updateNavigation(name);
+}
+
+
+function updateNavigation(name) {
+
+    document
+        .querySelectorAll(".nav-item")
+        .forEach(function(item) {
+            item.classList.remove("active");
+        });
+
+    if (name === "home") {
+        document
+            .getElementById("navHome")
+            .classList.add("active");
     }
 
+    if (name === "chapters") {
+        document
+            .getElementById("navChapters")
+            .classList.add("active");
+    }
 
-    applyMotionSetting();
-
-    updateSettingsUI();
-
+    if (name === "profile") {
+        document
+            .getElementById("navProfile")
+            .classList.add("active");
+    }
 }
 
 
-// ==========================================
-// 5. حفظ الإعدادات
-// ==========================================
-
-function saveSettings() {
-
-    localStorage.setItem(
-        "boussola_music",
-        musicEnabled ? "on" : "off"
-    );
-
-
-    localStorage.setItem(
-        "boussola_motion",
-        reducedMotion ? "reduced" : "normal"
-    );
-
-}
-
-
-// ==========================================
-// 6. حفظ تقدم المستخدم
-// ==========================================
-
-function saveProgress() {
-
-    const progress = {
-
-        stage: currentStage,
-
-        selectedChoice: selectedChoice,
-
-        updatedAt: Date.now()
-
-    };
-
-
-    localStorage.setItem(
-        "boussola_progress",
-        JSON.stringify(progress)
-    );
-
-}
-
-
-// ==========================================
-// 7. تحميل التقدم
-// ==========================================
-
-function loadProgress() {
+function loadData() {
 
     const saved =
-        localStorage.getItem(
-            "boussola_progress"
-        );
-
+        localStorage.getItem("boussola_data");
 
     if (!saved) {
-
-        currentStage = 0;
-
         return;
-
     }
-
 
     try {
 
-        const progress =
-            JSON.parse(saved);
+        const data = JSON.parse(saved);
 
+        currentNode =
+            data.currentNode || "start";
 
-        if (
-            Number.isInteger(progress.stage) &&
-            progress.stage >= 0 &&
-            progress.stage < stages.length
-        ) {
-
-            currentStage =
-                progress.stage;
-
-        }
+        stats =
+            data.stats || stats;
 
     } catch (error) {
 
-        currentStage = 0;
+        currentNode = "start";
 
     }
-
 }
 
 
-// ==========================================
-// 8. تغيير الشاشة
-// ==========================================
+function saveData() {
 
-function showScreen(screen) {
+    localStorage.setItem(
+        "boussola_data",
+        JSON.stringify({
+            currentNode,
+            stats
+        })
+    );
+}
 
-    const screens =
-        document.querySelectorAll(".screen");
 
+function renderQuestion() {
 
-    screens.forEach(function(item) {
+    const node =
+        journey[currentNode];
 
-        item.classList.remove("active");
+    if (!node) {
+        return;
+    }
+
+    chapterNumber.textContent =
+        node.chapter;
+
+    chapterTitle.textContent =
+        node.chapterTitle;
+
+    stageLabel.textContent =
+        node.label;
+
+    questionTitle.textContent =
+        node.title;
+
+    questionText.textContent =
+        node.text;
+
+    progressText.textContent =
+        String(currentNode.length).padStart(2, "0");
+
+    progressBar.style.width =
+        Math.min(
+            95,
+            8 + currentNode.length * 4
+        ) + "%";
+
+    choicesContainer.innerHTML = "";
+
+    continueButton.style.display =
+        "none";
+
+    selectedChoice = null;
+
+    node.choices.forEach(function(choice, index) {
+
+        const button =
+            document.createElement("button");
+
+        button.className = "choice";
+
+        button.textContent =
+            choice.text;
+
+        button.addEventListener(
+            "click",
+            function() {
+
+                document
+                    .querySelectorAll(".choice")
+                    .forEach(function(item) {
+                        item.classList.remove("selected");
+                    });
+
+                button.classList.add("selected");
+
+                selectedChoice = choice;
+
+                continueButton.style.display =
+                    "flex";
+
+            }
+        );
+
+        choicesContainer.appendChild(button);
 
     });
-
-
-    screen.classList.add("active");
-
 }
 
-
-// ==========================================
-// 9. بداية الرحلة
-// ==========================================
 
 function startJourney() {
 
-    loadProgress();
+    loadData();
 
-    showScreen(journeyScreen);
+    showScreen("journey");
 
-    renderStage();
-
+    renderQuestion();
 }
 
 
-// ==========================================
-// 10. عرض المرحلة
-// ==========================================
+function continueJourney() {
 
-function renderStage() {
+    if (!selectedChoice) {
 
-    const stage =
-        stages[currentStage];
-
-
-    if (!stage) {
-
-        showEnding();
+        showToast("اختر إجابة أولًا");
 
         return;
-
     }
 
+    const choice =
+        selectedChoice;
 
-    selectedChoice = null;
+    stats.ambition +=
+        choice.stats.ambition;
 
+    stats.courage +=
+        choice.stats.courage;
 
-    chapterElement.textContent =
-        stage.chapter;
+    stats.curiosity +=
+        choice.stats.curiosity;
 
+    stats.change +=
+        choice.stats.change;
 
-    stageNumberElement.textContent =
-        "المرحلة " +
-        (currentStage + 1) +
-        " / " +
-        stages.length;
+    currentNode =
+        choice.next;
 
+    saveData();
 
-    stageTitleElement.textContent =
-        stage.title;
-
-
-    stageTextElement.textContent =
-        stage.text;
-
-
-    const percentage =
-        ((currentStage + 1) / stages.length) * 100;
-
-
-    progressBar.style.width =
-        percentage + "%";
-
-
-    choicesElement.innerHTML = "";
-
-
-    if (stage.choices) {
-
-        stage.choices.forEach(
-            function(choice, index) {
-
-                createChoiceButton(
-                    choice,
-                    index
-                );
-
-            }
-        );
-
-
-        continueButton.style.display =
-            "none";
-
-    } else {
-
-        continueButton.style.display =
-            "block";
-
-    }
-
-
-    saveProgress();
-
+    renderQuestion();
 }
 
 
-// ==========================================
-// 11. إنشاء زر اختيار
-// ==========================================
+function buildChapters() {
 
-function createChoiceButton(
-    choiceText,
-    index
-) {
+    const chapters = [
 
-    const button =
-        document.createElement("button");
+        ["01", "البداية", "الاختيارات الأولى"],
 
+        ["02", "الخوف", "الأشياء التي لا نقولها"],
 
-    button.type = "button";
+        ["03", "المستقبل", "الطريق الذي لم تره بعد"],
 
-    button.className =
-        "choice";
+        ["04", "السقوط", "عندما لا تسير الأمور كما تريد"],
 
+        ["05", "التغيير", "القرار الذي يبدأ كل شيء"],
 
-    button.textContent =
-        choiceText;
+        ["06", "الطموح", "إلى أي مكان تريد الوصول"],
 
+        ["07", "المتاهة", "بعض الطرق لا تظهر للجميع"],
 
-    button.addEventListener(
-        "click",
-        function() {
+        ["08", "الأمنيات", "ما تريده عندما لا يراك أحد"],
 
-            selectChoice(
-                button,
-                index
-            );
+        ["09", "المجهول", "الجزء الذي لا يمكن توقعه"],
 
-        }
-    );
+        ["10", "المرآة", "ما تكشفه اختياراتك"]
 
+    ];
 
-    choicesElement.appendChild(
-        button
-    );
+    chaptersList.innerHTML = "";
 
-}
+    chapters.forEach(function(chapter, index) {
 
+        const card =
+            document.createElement("div");
 
-// ==========================================
-// 12. اختيار إجابة
-// ==========================================
+        card.className =
+            "chapter-card";
 
-function selectChoice(
-    button,
-    index
-) {
-
-    const buttons =
-        document.querySelectorAll(
-            ".choice"
-        );
-
-
-    buttons.forEach(
-        function(item) {
-
-            item.classList.remove(
-                "selected"
-            );
-
-        }
-    );
-
-
-    button.classList.add(
-        "selected"
-    );
-
-
-    selectedChoice = index;
-
-
-    continueButton.style.display =
-        "block";
-
-
-    saveProgress();
-
-}
-
-
-// ==========================================
-// 13. الانتقال للمرحلة التالية
-// ==========================================
-
-function nextStage() {
-
-    const stage =
-        stages[currentStage];
-
-
-    if (
-        stage.choices &&
-        selectedChoice === null
-    ) {
-
-        showToast(
-            "اختار إجابة الأول"
-        );
-
-        return;
-
-    }
-
-
-    playTransition(
-        function() {
-
-            currentStage++;
-
-            selectedChoice = null;
-
-
-            if (
-                currentStage >=
-                stages.length
-            ) {
-
-                saveProgress();
-
-                showEnding();
-
-                return;
-
-            }
-
-
-            renderStage();
-
-        }
-    );
-
-}
-
-
-// ==========================================
-// 14. الانتقال السينمائي
-// ==========================================
-
-function playTransition(callback) {
-
-    if (reducedMotion) {
-
-        callback();
-
-        return;
-
-    }
-
-
-    journeyScreen.classList.add(
-        "leaving"
-    );
-
-
-    setTimeout(
-        function() {
-
-            callback();
-
-            journeyScreen.classList.remove(
-                "leaving"
-            );
-
-        },
-        180
-    );
-
-}
-
-
-// ==========================================
-// 15. الرجوع
-// ==========================================
-
-function goBack() {
-
-    if (currentStage <= 0) {
-
-        showScreen(homeScreen);
-
-        return;
-
-    }
-
-
-    currentStage--;
-
-    selectedChoice = null;
-
-    renderStage();
-
-}
-
-
-// ==========================================
-// 16. النهاية
-// ==========================================
-
-function showEnding() {
-
-    showScreen(endingScreen);
-
-}
-
-
-// ==========================================
-// 17. إعادة الرحلة
-// ==========================================
-
-function restartJourney() {
-
-    localStorage.removeItem(
-        "boussola_progress"
-    );
-
-
-    currentStage = 0;
-
-    selectedChoice = null;
-
-
-    showScreen(homeScreen);
-
-}
-
-
-// ==========================================
-// 18. فتح الإعدادات
-// ==========================================
-
-function openSettings() {
-
-    settingsPanel.classList.add(
-        "active"
-    );
-
-
-    settingsPanel.setAttribute(
-        "aria-hidden",
-        "false"
-    );
-
-
-    updateSettingsUI();
-
-}
-
-
-// ==========================================
-// 19. إغلاق الإعدادات
-// ==========================================
-
-function closeSettingsPanel() {
-
-    settingsPanel.classList.remove(
-        "active"
-    );
-
-
-    settingsPanel.setAttribute(
-        "aria-hidden",
-        "true"
-    );
-
-}
-
-
-// ==========================================
-// 20. الموسيقى
-// ==========================================
-
-function toggleMusic() {
-
-    musicEnabled =
-        !musicEnabled;
-
-
-    saveSettings();
-
-    updateSettingsUI();
-
-
-    if (musicEnabled) {
-
-        showToast(
-            "الموسيقى مفعلة"
-        );
-
-    } else {
-
-        showToast(
-            "الموسيقى متوقفة"
-        );
-
-    }
-
-}
-
-
-// ==========================================
-// 21. تقليل الحركة
-// ==========================================
-
-function toggleMotion() {
-
-    reducedMotion =
-        !reducedMotion;
-
-
-    applyMotionSetting();
-
-    saveSettings();
-
-    updateSettingsUI();
-
-
-    if (reducedMotion) {
-
-        showToast(
-            "تم تقليل الحركة"
-        );
-
-    } else {
-
-        showToast(
-            "الحركة عادية"
-        );
-
-    }
-
-}
-
-
-// ==========================================
-// 22. تطبيق إعداد الحركة
-// ==========================================
-
-function applyMotionSetting() {
-
-    document.body.classList.toggle(
-        "reduce-motion",
-        reducedMotion
-    );
-
-}
-
-
-// ==========================================
-// 23. تحديث واجهة الإعدادات
-// ==========================================
-
-function updateSettingsUI() {
-
-    musicToggle.textContent =
-        musicEnabled
-            ? "تشغيل"
-            : "إيقاف";
-
-
-    motionToggle.textContent =
-        reducedMotion
-            ? "تقليل"
-            : "عادي";
-
-}
-
-
-// ==========================================
-// 24. رسالة صغيرة
-// ==========================================
-
-function showToast(message) {
-
-    toastElement.textContent =
-        message;
-
-
-    toastElement.classList.add(
-        "show"
-    );
-
-
-    clearTimeout(
-        window.boussolaToastTimer
-    );
-
-
-    window.boussolaToastTimer =
-        setTimeout(
-            function() {
-
-                toastElement.classList.remove(
-                    "show"
-                );
-
-            },
-            1500
-        );
-
-}
-
-
-// ==========================================
-// 25. اختصارات لوحة المفاتيح
-// ==========================================
-
-document.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (event.key === "Escape") {
-
-            closeSettingsPanel();
-
+        if (index > 1) {
+            card.classList.add("locked");
         }
 
-    }
-);
+        card.innerHTML = `
+            <span class="chapter-card-number">
+                الفصل ${chapter[0]}
+            </span>
+
+            <h3>
+                ${chapter[1]}
+            </h3>
+
+            <p>
+                ${chapter[2]}
+            </p>
+
+            <div
+                class="chapter-card-progress"
+                style="width:${index === 0 ? 100 : index === 1 ? 45 : 0}%"
+            ></div>
+        `;
+
+        chaptersList.appendChild(card);
+
+    });
+}
 
 
-// ==========================================
-// 26. الضغط خارج الإعدادات
-// ==========================================
+function updateProfile() {
 
-settingsPanel.addEventListener(
-    "click",
-    function(event) {
+    document.getElementById(
+        "ambitionStat"
+    ).textContent = stats.ambition;
 
-        if (
-            event.target ===
-            settingsPanel
-        ) {
+    document.getElementById(
+        "courageStat"
+    ).textContent = stats.courage;
 
-            closeSettingsPanel();
+    document.getElementById(
+        "curiosityStat"
+    ).textContent = stats.curiosity;
 
-        }
-
-    }
-);
+    document.getElementById(
+        "changeStat"
+    ).textContent = stats.change;
 
 
-// ==========================================
-// 27. ربط الأزرار
-// ==========================================
-
-startButton.addEventListener(
-    "click",
-    startJourney
-);
-
-
-backButton.addEventListener(
-    "click",
-    goBack
-);
-
-
-settingsButton.addEventListener(
-    "click",
-    openSettings
-);
-
-
-closeSettings.addEventListener(
-    "click",
-    closeSettingsPanel
-);
-
-
-continueButton.addEventListener(
-    "click",
-    nextStage
-);
-
-
-restartButton.addEventListener(
-    "click",
-    restartJourney
-);
-
-
-musicToggle.addEventListener(
-    "click",
-    toggleMusic
-);
-
-
-motionToggle.addEventListener(
-    "click",
-    toggleMotion
-);
-
-
-// ==========================================
-// 28. تشغيل التطبيق
-// ==========================================
-
-loadSettings();
-
-loadProgress();
-
-showScreen(homeScreen);
+    const total =
+        stats.ambition +
+    
