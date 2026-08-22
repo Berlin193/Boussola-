@@ -1,1055 +1,382 @@
 "use strict";
 
 /* =========================================================
-   BOUSSOLA
-   Local AI + Journey Engine + Ambient Sound
-========================================================= */
-
-const STORAGE = "boussoula_v3";
-
-const chapters = [
-  "البداية",
-  "الخوف",
-  "المرآة",
-  "الاختيار",
-  "التحول",
-  "الاتجاه"
-];
-
-const questions = [
-  ["لو اختفى الخوف الآن، ماذا ستفعل؟","الخوف أحيانًا يكون أكبر من الشيء الذي نخاف منه.","الشجاعة"],
-  ["ما أكثر شيء لا تريد خسارته؟","إجابتك تكشف ما تعتبره مهمًا فعلًا.","التأمل"],
-  ["هل تفضل أن تعرف الحقيقة حتى لو كانت مؤلمة؟","بعض الإجابات تغير الطريقة التي ترى بها العالم.","الفضول"],
-  ["متى تشعر أنك أقوى؟","القوة ليست دائمًا في عدم السقوط.","الشجاعة"],
-  ["هل النجاح أهم أم السلام الداخلي؟","لا توجد إجابة صحيحة هنا.","الطموح"],
-  ["لو استطعت تغيير شيء في الماضي، ماذا ستغير؟","الماضي لا يتغير، لكن نظرتنا إليه يمكن أن تتغير.","التأمل"],
-  ["هل تثق بنفسك عندما تكون وحدك؟","هذه الإجابة لك أنت فقط.","الشجاعة"],
-  ["ما الشيء الذي تؤجله رغم أنك تعرف أنه مهم؟","أحيانًا نعرف الطريق ونخاف من أول خطوة.","الطموح"],
-  ["هل تفضل حياة مستقرة أم حياة مليئة بالمغامرة؟","الاستقرار والمغامرة لهما ثمن.","المغامرة"],
-  ["من أنت عندما لا يراك أحد؟","هذه ربما أهم إجابة في الرحلة.","التأمل"],
-
-  ["هل تسامح نفسك بسهولة؟","أحيانًا نكون أقسى على أنفسنا من الآخرين.","التأمل"],
-  ["ما أكثر شيء يجعلك تستمر؟","اعرف الوقود الذي يحركك.","الطموح"],
-  ["هل يمكن للفشل أن يكون مفيدًا؟","ربما يكون الفشل مجرد اتجاه جديد.","الشجاعة"],
-  ["هل تخاف من أن تبدأ من الصفر؟","الصفر ليس دائمًا نهاية.","الشجاعة"],
-  ["هل تهتم برأي الناس فيك؟","العيش لنظرة الآخرين قد يجعلك تنسى نفسك.","التأمل"],
-  ["ما الحلم الذي لم تخبر به أحدًا؟","بعض الأحلام تحتاج وقتًا قبل أن ترى النور.","الطموح"],
-  ["لو حصلت على المال الذي تريده، ماذا ستفعل؟","المال يكشف أحيانًا ما نبحث عنه فعلًا.","الطموح"],
-  ["هل تستطيع ترك شيء تحبه إذا كان يؤذيك؟","الترك أحيانًا يحتاج شجاعة أكثر من البقاء.","الشجاعة"],
-  ["ما أكثر شيء يثير فضولك؟","الفضول قد يكون بداية الطريق.","الفضول"],
-  ["هل تريد أن يعرفك الآخرون كما أنت؟","أم أنك تفضل أن يحتفظوا بصورة معينة عنك؟","التأمل"],
-
-  ["هل أنت مستعد لسماع شيء لا يعجبك عن نفسك؟","لا يمكن تغيير شيء لا نراه.","التأمل"],
-  ["ما الشيء الذي تريد أن تصبح أفضل فيه؟","اختيار واحد قد يكون بداية تحول كبير.","الطموح"],
-  ["هل تفضل الطريق السهل أم الطريق الذي يقودك لحلمك؟","الطريق الأصعب ليس دائمًا الأفضل، لكنه أحيانًا ضروري.","الشجاعة"],
-  ["هل تؤمن أن الإنسان يستطيع تغيير نفسه؟","التغيير يبدأ بفكرة صغيرة.","الطموح"],
-  ["ماذا تفعل عندما تفشل؟","رد فعلك بعد السقوط أهم من السقوط نفسه.","الشجاعة"],
-  ["هل تعرف ما تريد من حياتك؟","عدم معرفة الاتجاه ليست مشكلة إذا كنت مستعدًا للبحث.","الفضول"],
-  ["ما الشيء الذي يمنعك من الحركة؟","سمِّ العائق وستصبح أقرب لتجاوزه.","التأمل"],
-  ["لو كان أمامك طريق مجهول، هل ستدخل؟","المجهول ليس دائمًا خطرًا.","المغامرة"],
-  ["هل يمكن أن تبدأ بدون أن تكون مستعدًا؟","أحيانًا الاستعداد الحقيقي يأتي بعد البداية.","الشجاعة"],
-  ["ما الشيء الذي تريد إثباته؟","ولمن تريد إثباته؟","الطموح"],
-
-  ["هل تستطيع أن تقول لا؟","الحدود جزء من معرفة نفسك.","الشجاعة"],
-  ["هل تعطي فرصًا كثيرة للآخرين؟","وأنت، كم فرصة تعطي لنفسك؟","التأمل"],
-  ["ما أكثر قرار غير حياتك؟","حتى القرار الصغير يمكن أن يغير الاتجاه.","التأمل"],
-  ["هل تريد أن تعيش كما يتوقع الآخرون؟","أم كما تختار أنت؟","الشجاعة"],
-  ["ما الشيء الذي تريد تركه خلفك؟","يمكن أن يكون خوفًا أو عادة أو شخصًا أو فكرة.","التحول"],
-  ["ماذا تريد أن تأخذ معك؟","اختيار ما تحتفظ به مهم مثل اختيار ما تتركه.","التأمل"],
-  ["هل ترى نفسك في المستقبل مختلفًا؟","المستقبل يبدأ من قرارات الحاضر.","الطموح"],
-  ["هل تستطيع الانتظار من أجل شيء أكبر؟","الصبر ليس توقفًا دائمًا.","الطموح"],
-  ["متى تشعر أنك حي فعلًا؟","ربما تكمن الإجابة هناك.","المغامرة"],
-  ["هل تبحث عن معنى أم عن نتيجة؟","كل واحد منهما يقود لطريق مختلف.","الفضول"],
-
-  ["هل أنت مستعد لتغيير عادة واحدة؟","لا تحاول تغيير كل شيء دفعة واحدة.","التحول"],
-  ["ما أول خطوة يمكنك فعلها اليوم؟","الفكرة التي لا تتحول إلى فعل تبقى فكرة.","الشجاعة"],
-  ["هل تحتاج إلى بداية جديدة؟","البداية الجديدة لا تحتاج تاريخًا جديدًا.","التحول"],
-  ["هل تخاف أن يراك الآخرون وأنت تفشل؟","الفشل أمام الآخرين لا يقلل من قيمتك.","الشجاعة"],
-  ["ما الذي يجعلك مختلفًا؟","لا تبحث عن إجابة جميلة، ابحث عن إجابة صادقة.","التأمل"],
-  ["هل تعرف متى تتوقف؟","الاستمرار قوة، لكن معرفة متى تتوقف قوة أيضًا.","التأمل"],
-  ["هل تختار ما تريده أم ما تحتاجه؟","أحيانًا نحتاج شيئًا لا نريده.","التأمل"],
-  ["ما الذي ستفعله لو عرفت أنك لن تفشل؟","هذه الإجابة قد تكون أقرب حلم لك.","الطموح"],
-  ["هل تريد أن تصبح أقوى أم أكثر هدوءًا؟","القوة والهدوء ليسا متناقضين.","التأمل"],
-  ["هل تثق بالطريق حتى عندما لا ترى نهايته؟","هنا يظهر معنى البوصلة.","المغامرة"],
-
-  ["هل أنت مستعد للمجهول؟","المجهول يبدأ بعد آخر شيء تعرفه.","المغامرة"],
-  ["ماذا ستختار لو لم يكن هناك حكم من أحد؟","أحيانًا نعيش تحت مراقبة غير موجودة أصلًا.","الشجاعة"],
-  ["ما الشيء الذي تتمنى أن تسمعه الآن؟","ربما تستطيع قوله لنفسك.","التأمل"],
-  ["هل تستطيع أن تبدأ وحدك؟","ليس كل طريق يحتاج جمهورًا.","الشجاعة"],
-  ["هل النجاح بالنسبة لك رقم أم شعور؟","تعريفك للنجاح يغير طريقك.","الطموح"],
-  ["ماذا لو كانت حياتك الحالية مجرد فصل؟","الفصل لا يحدد الكتاب كله.","التحول"],
-  ["هل ستختار نفسك هذه المرة؟","ربما هذا هو السؤال الحقيقي.","الشجاعة"],
-  ["ماذا تريد أن يحدث بعد هذه الرحلة؟","لا تجعل الرحلة تنتهي عند الشاشة.","الطموح"],
-  ["هل تعرف اتجاهك الآن؟","ربما لا تحتاج أن تعرف النهاية، فقط الاتجاه.","الفضول"],
-  ["لو كانت هذه آخر لحظة، ماذا ستبدأ؟","لا تجب بسرعة.","الشجاعة"]
-];
-
-let state = {
-  stage: 0,
-  answers: [],
-  sound: true,
-  motion: true
-};
-
-
-/* =========================================================
-   DOM
-========================================================= */
-
-const $ = id => document.getElementById(id);
-
-const screens = {
-  home: $("home"),
-  map: $("map"),
-  journey: $("journey"),
-  profile: $("profile")
-};
-
-
-/* =========================================================
-   SAVE / LOAD
-========================================================= */
-
-function save() {
-
-  localStorage.setItem(
-    STORAGE,
-    JSON.stringify(state)
-  );
-
-}
-
-function load() {
-
-  try {
-
-    const data =
-      JSON.parse(localStorage.getItem(STORAGE));
-
-    if (!data) return;
-
-    state = {
-      ...state,
-      ...data
-    };
-
-  } catch (error) {
-
-    console.log("Boussola storage error");
-
-  }
-
-}
-
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-function show(name) {
-
-  Object.values(screens)
-    .forEach(screen => {
-
-      screen.classList.remove("active");
-
-    });
-
-  screens[name].classList.add("active");
-
-  window.scrollTo({
-    top: 0,
-    behavior: state.motion ? "smooth" : "auto"
-  });
-
-}
-
-
-document
-  .querySelectorAll("[data-screen]")
-  .forEach(button => {
-
-    button.addEventListener(
-      "click",
-      () => show(button.dataset.screen)
-    );
-
-  });
-
-
-/* =========================================================
-   START
-========================================================= */
-
-$("startBtn").addEventListener(
-  "click",
-  () => {
-
-    if (state.stage >= questions.length) {
-
-      state.stage = 0;
-      state.answers = [];
-
-    }
-
-    show("journey");
-
-    startAtmosphere();
-
-    renderQuestion();
-
-  }
-);
-
-
-/* =========================================================
-   JOURNEY
-========================================================= */
-
-function renderQuestion() {
-
-  const index = state.stage;
-
-  const q = questions[index];
-
-  if (!q) {
-
-    finish();
-
-    return;
-
-  }
-
-  const chapter =
-    Math.floor(index / 10);
-
-  $("chapterLabel").textContent =
-    `الفصل ${chapter + 1}`;
-
-  $("chapterTitle").textContent =
-    chapters[chapter];
-
-  $("stageCurrent").textContent =
-    String(index + 1).padStart(2, "0");
-
-  $("stageLabel").textContent =
-    String(index + 1).padStart(2, "0");
-
-  $("questionTitle").textContent =
-    q[0];
-
-  $("questionDescription").textContent =
-    q[1];
-
-  $("questionSymbol").textContent =
-    symbolFor(q[2]);
-
-  const percent =
-    Math.round((index / questions.length) * 100);
-
-  $("progressBar").style.width =
-    `${percent}%`;
-
-  createAnswers();
-
-  aiSay(
-    `المرحلة ${index + 1} من ${questions.length}. ${aiHint(q[2])}`
-  );
-
-  updateMap();
-
-}
-
-
-function createAnswers() {
-
-  const box = $("answers");
-
-  box.innerHTML = "";
-
-  const options = [
-    ["نعم", "yes"],
-    ["لا", "no"],
-    ["ربما", "maybe"],
-    ["لا أعرف", "unknown"]
+   BOUSSOLA — رحلة لاكتشاف الذات
+   app.js — منطق التطبيق الكامل
+   ========================================================= */
+
+(function () {
+
+  /* =======================================================
+     1. البيانات — الفصول والأسئلة
+     ======================================================= */
+
+  var STORAGE_KEY = "boussola_state_v2";
+  var TOTAL_STAGES = 60;
+  var STAGES_PER_CHAPTER = 10;
+
+  var chapters = [
+    { id: 1, title: "البداية", description: "الاختيارات الأولى", symbol: "✦" },
+    { id: 2, title: "الخوف", description: "الأشياء التي لا نقولها", symbol: "♧" },
+    { id: 3, title: "العقل", description: "الصراع الداخلي", symbol: "◇" },
+    { id: 4, title: "السقوط", description: "عندما لا تسير الأمور كما تريد", symbol: "♧" },
+    { id: 5, title: "النهوض", description: "التغيير والمجازفة من جديد", symbol: "✧" },
+    { id: 6, title: "الطموح", description: "النجاح وما وراءه", symbol: "★" }
   ];
 
-  options.forEach(
-    ([text, type], i) => {
+  // كل سؤال: t = النص، h = تلميح، a = [تسمية، سمة، وزن][]
+  var questions = [
 
-      const button =
-        document.createElement("button");
+    // الفصل 1 — البداية
+    { t: "ماذا تبحث عنه الآن؟", h: "اختر ما يشبهك أكثر", a: [["الأمان", "security", 1], ["النجاح", "ambition", 2], ["المجهول", "curiosity", 2]] },
+    { t: "لو كان أمامك طريقان، ماذا تختار؟", h: "لا توجد إجابة صحيحة", a: [["الطريق السهل", "security", 1], ["الطريق الأصعب", "courage", 2], ["طريق لم يجربه أحد", "curiosity", 3]] },
+    { t: "ما الشيء الذي تخاف أن تخسره؟", h: "فكر في أول إجابة تأتي إلى ذهنك", a: [["الاستقرار", "security", 2], ["فرصتي", "ambition", 2], ["حريتي", "change", 2]] },
+    { t: "عندما تفشل في شيء مهم...", h: "كيف تتصرف غالبًا؟", a: [["أتوقف قليلًا", "security", 1], ["أحاول مرة أخرى", "courage", 3], ["أغير الخطة", "change", 3]] },
+    { t: "ما الذي يجذبك أكثر؟", h: "اختر الشعور الأقرب لك", a: [["حياة مستقرة", "security", 2], ["إنجاز كبير", "ambition", 3], ["تجربة جديدة", "curiosity", 3]] },
+    { t: "لو لم يعرف أحد قرارك، ماذا ستختار؟", h: "تجاهل رأي الآخرين", a: [["ما يجعلني مرتاحًا", "security", 2], ["ما أريده فعلًا", "ambition", 3], ["ما يخيفني", "courage", 3]] },
+    { t: "هل تفضل أن تعرف المستقبل؟", h: "تخيل أن لديك هذه القدرة", a: [["نعم", "security", 2], ["لا", "curiosity", 2], ["أريد أن أصنعه بنفسي", "ambition", 3]] },
+    { t: "ماذا تفعل عندما تكون وحدك؟", h: "اختر الأقرب", a: [["أفكر كثيرًا", "curiosity", 2], ["أخطط", "ambition", 2], ["أبحث عن شيء يلهيني", "change", 1]] },
+    { t: "ما الذي يمنحك القوة؟", h: "فكر في أصعب أوقاتك", a: [["الناس الذين أحبهم", "security", 2], ["هدفي", "ambition", 3], ["إيماني بنفسي", "courage", 3]] },
+    { t: "أول فصل انتهى. ماذا تريد من الفصل القادم؟", h: "اختر شعورًا", a: [["أن أفهم نفسي", "curiosity", 3], ["أن أتغير", "change", 3], ["أن أصبح أقوى", "courage", 3]] },
 
-      button.className = "answer";
+    // الفصل 2 — الخوف
+    { t: "ما أكثر شيء يجعلك تتردد؟", h: "كن صريحًا مع نفسك", a: [["الخوف من الفشل", "security", 2], ["رأي الناس", "security", 2], ["عدم معرفة النتيجة", "curiosity", 2]] },
+    { t: "عندما يخاف الجميع، ماذا تفعل؟", h: "تخيل موقفًا حقيقيًا", a: [["أبتعد", "security", 2], ["أراقب", "curiosity", 2], ["أتقدم", "courage", 3]] },
+    { t: "هل تخفي خوفك عن الآخرين؟", h: "اختر بصراحة", a: [["دائمًا تقريبًا", "security", 2], ["أحيانًا", "courage", 1], ["لا أهتم بإخفائه", "change", 2]] },
+    { t: "ماذا تفعل عندما ينتقدك شخص؟", h: "رد فعلك الأول", a: [["أتأثر", "security", 2], ["أفكر في كلامه", "curiosity", 2], ["أثبت له العكس", "ambition", 3]] },
+    { t: "أي خوف تريد التخلص منه؟", h: "اختيارك مهم", a: [["الخوف من الفشل", "courage", 3], ["الخوف من الوحدة", "security", 2], ["الخوف من التغيير", "change", 3]] },
+    { t: "لو ضمنت أنك لن تخسر، ماذا ستفعل؟", h: "أطلق خيالك", a: [["أبدأ مشروعًا", "ambition", 3], ["أسافر", "curiosity", 3], ["أغير حياتي", "change", 3]] },
+    { t: "ما الذي يجعلك تشعر أنك ضعيف؟", h: "لا تبحث عن إجابة مثالية", a: [["الفشل", "courage", 2], ["الوحدة", "security", 2], ["عدم السيطرة", "change", 2]] },
+    { t: "هل تفضل مواجهة المشكلة أم تجاهلها؟", h: "ما الذي تفعله فعلًا؟", a: [["أواجهها", "courage", 3], ["أؤجلها", "security", 1], ["أبحث عن حل مختلف", "curiosity", 3]] },
+    { t: "إذا عاد بك الزمن، ماذا ستغير؟", h: "فكر في قرار واحد فقط", a: [["قرارًا مهمًا", "change", 3], ["لا شيء", "security", 1], ["كنت سأغامر أكثر", "courage", 3]] },
+    { t: "ما الشيء الذي لا تريد أن تصبح عليه؟", h: "الإجابة تكشف شيئًا عنك", a: [["شخصًا مستسلمًا", "ambition", 3], ["شخصًا خائفًا", "courage", 3], ["شخصًا بلا هدف", "ambition", 3]] },
 
-      button.innerHTML = `
-        <span class="answer-icon">
-          ${["✓","×","◇","?"][i]}
-        </span>
+    // الفصل 3 — العقل
+    { t: "هل تثق بعقلك أم شعورك؟", h: "اختر الأقرب", a: [["العقل", "curiosity", 2], ["الشعور", "courage", 2], ["كلاهما", "change", 2]] },
+    { t: "عندما تفكر كثيرًا، ماذا يحدث؟", h: "راقب نفسك", a: [["أجد حلولًا", "curiosity", 3], ["أتوتر", "security", 2], ["أغير رأيي", "change", 2]] },
+    { t: "هل تحلل كل شيء؟", h: "حتى الأشياء الصغيرة؟", a: [["نعم", "curiosity", 3], ["أحيانًا", "security", 1], ["لا", "courage", 2]] },
+    { t: "ماذا تفعل عندما لا تجد إجابة؟", h: "هذه اللحظة مهمة", a: [["أبحث أكثر", "curiosity", 3], ["أترك الأمر", "security", 1], ["أجرب شيئًا جديدًا", "change", 3]] },
+    { t: "ما أهم شيء في القرار؟", h: "اختر واحدًا", a: [["المنطق", "curiosity", 2], ["النتيجة", "ambition", 3], ["الإحساس", "courage", 2]] },
+    { t: "هل تتغير أفكارك بسرعة؟", h: "فكر في السنوات الأخيرة", a: [["نعم", "change", 3], ["قليلًا", "security", 1], ["نادراً", "ambition", 2]] },
+    { t: "لو اكتشفت أنك كنت مخطئًا؟", h: "ماذا تفعل؟", a: [["أعترف", "courage", 3], ["أراجع نفسي", "curiosity", 3], ["أحاول تبرير موقفي", "security", 1]] },
+    { t: "ما الذي يزعجك أكثر؟", h: "اختر الأقرب", a: [["الفوضى", "security", 2], ["الجهل", "curiosity", 3], ["الركود", "change", 3]] },
+    { t: "هل تحب الأسئلة أكثر أم الإجابات؟", h: "فكر في نفسك", a: [["الأسئلة", "curiosity", 3], ["الإجابات", "security", 2], ["التجربة", "change", 3]] },
+    { t: "لو كان عقلك مكانًا، كيف سيكون؟", h: "اختر الصورة الأقرب", a: [["مدينة مزدحمة", "curiosity", 3], ["غرفة هادئة", "security", 2], ["طريق مفتوح", "change", 3]] },
 
-        <span>${text}</span>
+    // الفصل 4 — السقوط
+    { t: "هل تعتبر الفشل نهاية؟", h: "فكر في آخر فشل مررت به", a: [["أحيانًا", "security", 1], ["لا", "courage", 3], ["هو بداية جديدة", "change", 3]] },
+    { t: "ماذا تفعل بعد خسارة كبيرة؟", h: "رد فعلك الطبيعي", a: [["أحتاج وقتًا", "security", 2], ["أتعلم منها", "curiosity", 3], ["أبدأ من جديد", "courage", 3]] },
+    { t: "من أين تأتي قوتك بعد السقوط؟", h: "اختيار واحد", a: [["من نفسي", "courage", 3], ["من الآخرين", "security", 2], ["من رغبتي في التغيير", "change", 3]] },
+    { t: "هل سبق أن غيرك الفشل؟", h: "انظر إلى الماضي", a: [["نعم كثيرًا", "change", 3], ["قليلًا", "curiosity", 2], ["لا أظن", "security", 1]] },
+    { t: "ماذا تقول لنفسك بعد الخطأ؟", h: "كن صادقًا", a: [["كان يجب أن أعرف", "security", 1], ["سأتعلم", "curiosity", 3], ["سأحاول مرة أخرى", "courage", 3]] },
+    { t: "هل تسامح نفسك بسهولة؟", h: "لا توجد إجابة خاطئة", a: [["لا", "security", 2], ["أحيانًا", "change", 2], ["نعم", "courage", 2]] },
+    { t: "لو سقطت أمام الجميع؟", h: "تخيل الموقف", a: [["أشعر بالإحراج", "security", 2], ["أكمل", "courage", 3], ["أضحك وأتعلم", "change", 3]] },
+    { t: "ما أصعب شيء في البداية من جديد؟", h: "اختر إحساسًا", a: [["الخوف", "courage", 2], ["الشك", "security", 2], ["ترك الماضي", "change", 3]] },
+    { t: "هل الماضي يحددك؟", h: "فكر قبل الاختيار", a: [["أحيانًا", "security", 1], ["لا", "change", 3], ["هو جزء مني", "curiosity", 2]] },
+    { t: "وصلت إلى نهاية السقوط. ماذا تختار؟", h: "هذه إجابة مهمة", a: [["أستسلم", "security", 0], ["أتعلم", "curiosity", 3], ["أنهض", "courage", 4]] },
 
-        <b>←</b>
-      `;
+    // الفصل 5 — النهوض
+    { t: "ماذا يعني التغيير بالنسبة لك؟", h: "اختر المعنى الأقرب", a: [["خطر", "security", 1], ["فرصة", "ambition", 3], ["مغامرة", "curiosity", 3]] },
+    { t: "هل تستطيع ترك شيء تحبه؟", h: "فكر في شيء من الماضي", a: [["صعب جدًا", "security", 2], ["إذا كان ضروريًا", "change", 2], ["نعم إذا كان هناك شيء أفضل", "ambition", 3]] },
+    { t: "ما الذي يجعلك تبدأ؟", h: "ما المحرك الحقيقي؟", a: [["الحاجة", "security", 2], ["الحلم", "ambition", 3], ["الفضول", "curiosity", 3]] },
+    { t: "هل تحب المخاطرة؟", h: "اختيارك سيؤثر على النتيجة", a: [["قليلًا", "security", 1], ["إذا كانت محسوبة", "curiosity", 2], ["نعم", "courage", 3]] },
+    { t: "لو فتحت أمامك فرصة كبيرة؟", h: "ماذا ستفعل؟", a: [["أدرسها", "curiosity", 2], ["أدخل فورًا", "courage", 3], ["أحسب المكسب", "ambition", 3]] },
+    { t: "ما أكثر شيء تريد تغييره في حياتك؟", h: "اختر الاتجاه", a: [["روتيني", "change", 3], ["وضعي", "ambition", 3], ["طريقة تفكيري", "curiosity", 3]] },
+    { t: "هل تؤمن بأن الإنسان يستطيع تغيير نفسه؟", h: "اختر ما تؤمن به", a: [["نعم", "change", 3], ["إلى حد ما", "curiosity", 2], ["ليس بسهولة", "security", 2]] },
+    { t: "إذا كنت ستبدأ غدًا، ماذا ستفعل الليلة؟", h: "التخطيط يكشف الكثير", a: [["أخطط", "curiosity", 3], ["أجهز نفسي", "security", 2], ["أبدأ فورًا", "ambition", 3]] },
+    { t: "ماذا تفضل؟", h: "اختيار واحد", a: [["حياة هادئة", "security", 2], ["حياة كبيرة", "ambition", 3], ["حياة مختلفة", "change", 3]] },
+    { t: "أنت على بعد خطوة من النهاية. هل ستكمل؟", h: "هذه ليست إجابة عادية", a: [["نعم", "courage", 4], ["أحتاج وقتًا", "security", 1], ["سأعرف بنفسي", "curiosity", 3]] },
 
-      button.addEventListener(
-        "click",
-        () => choose(text, type, button)
-      );
+    // الفصل 6 — الطموح
+    { t: "ماذا يعني النجاح بالنسبة لك؟", h: "ليس ما يقوله الناس", a: [["المال", "ambition", 3], ["الحرية", "change", 3], ["السلام", "security", 3]] },
+    { t: "لو حصلت على كل ما تريد؟", h: "ماذا بعد ذلك؟", a: [["أرتاح", "security", 2], ["أبحث عن هدف جديد", "ambition", 3], ["أجرب شيئًا مختلفًا", "curiosity", 3]] },
+    { t: "ما الشيء الذي تريد أن يتذكرك الناس به؟", h: "اختر معنى", a: [["قوتي", "courage", 3], ["إنجازي", "ambition", 3], ["اختلافي", "change", 3]] },
+    { t: "هل تخاف من النجاح؟", h: "نعم، النجاح نفسه", a: [["أحيانًا", "security", 2], ["لا", "ambition", 3], ["أخاف من فقدانه", "security", 2]] },
+    { t: "إذا أصبحت أقوى، ماذا ستفعل؟", h: "تخيل نفسك", a: [["أحمي من أحب", "security", 3], ["أحقق أهدافي", "ambition", 3], ["أغير حياتي", "change", 3]] },
+    { t: "ما الشيء الذي لن تتنازل عنه؟", h: "قيمتك الأساسية", a: [["حريتي", "change", 3], ["كرامتي", "courage", 3], ["استقراري", "security", 3]] },
+    { t: "هل ما زلت الشخص نفسه الذي بدأ الرحلة؟", h: "قارن نفسك بالبداية", a: [["لا", "change", 3], ["ربما", "curiosity", 2], ["نعم", "security", 1]] },
+    { t: "ما الذي اكتشفته عن نفسك؟", h: "اختر الأقرب", a: [["أني أقوى مما توقعت", "courage", 4], ["أني أريد أكثر", "ambition", 4], ["أني ما زلت أبحث", "curiosity", 4]] },
+    { t: "لو كان أمامك باب أخير، هل ستفتحه؟", h: "لا يوجد رجوع", a: [["نعم", "courage", 4], ["أفكر أولًا", "curiosity", 3], ["أفتح الباب وأرى", "change", 4]] },
+    { t: "أين تريد أن تذهب من هنا؟", h: "آخر اختيار في الرحلة", a: [["إلى نفسي", "curiosity", 5], ["إلى حلمي", "ambition", 5], ["إلى حياة جديدة", "change", 5]] }
+  ];
 
-      box.appendChild(button);
-
-    }
-  );
-
-}
-
-
-function choose(text, type, button) {
-
-  if (button.classList.contains("selected"))
-    return;
-
-  button.classList.add("selected");
-
-  const category =
-    questions[state.stage][2];
-
-  state.answers[state.stage] = {
-    answer: text,
-    type,
-    category
+  // رسائل البوصلة الإرشادية — تتنوع حسب السمة المختارة
+  var guideMessages = {
+    security: ["الأمان اختيار، وليس ضعفًا.", "من يحمي ما يملك يبني على أساس ثابت.", "التوازن أيضًا نوع من الشجاعة."],
+    ambition: ["طموحك هو وقودك. لا تُطفئه.", "الأهداف الكبيرة تبدأ باختيار صغير كهذا.", "أنت تصنع مسارك بوضوح."],
+    courage: ["الشجاعة ليست غياب الخوف، بل التقدم رغمه.", "كل خطوة صعبة تجعلك أقوى.", "أنت تختار المواجهة، وهذا نادر."],
+    curiosity: ["الفضول هو بوصلتك الحقيقية.", "الأسئلة التي تطرحها تقربك من نفسك.", "الاستكشاف طريق، ليس وجهة."],
+    change: ["التغيير ليس خسارة، بل نسخة جديدة منك.", "أنت لا تخشى إعادة البناء.", "كل تحوّل يبدأ من قرار كهذا."]
   };
 
-  save();
+  // الأنماط الخمسة — تُحدَّد حسب السمة الأعلى
+  var archetypes = {
+    ambition: { symbol: "★", title: "الساعي", desc: "طموحك يدفعك دائمًا للأمام. لا تكتفي بالقليل، وتبحث دومًا عن الهدف التالي." },
+    courage: { symbol: "⚑", title: "المحارب", desc: "تواجه خوفك مباشرة، وتنهض في كل مرة تسقط فيها. القوة عندك اختيار يومي." },
+    curiosity: { symbol: "◇", title: "المستكشف", desc: "فضولك يقودك للبحث عن معنى أعمق لكل شيء حولك، ولنفسك قبل كل شيء." },
+    change: { symbol: "⟲", title: "المتحوّل", desc: "لا تخاف من هدم ما بنيته لتبني شيئًا أصدق. التغيير عندك طريقة حياة." },
+    security: { symbol: "⛨", title: "الحارس", desc: "تبني حياتك على أساس ثابت، وتحمي ما يهمك بصبر وثبات نادرين." }
+  };
 
-  aiAfterAnswer(text, category);
+  var traitLabels = {
+    ambition: "الطموح",
+    courage: "الشجاعة",
+    curiosity: "الفضول",
+    change: "التغيير",
+    security: "الأمان"
+  };
 
-  setTimeout(
-    () => {
+  var traitOrder = ["ambition", "courage", "curiosity", "change", "security"];
 
-      state.stage++;
 
-      save();
+  /* =======================================================
+     2. الحالة (State)
+     ======================================================= */
 
-      if (
-        state.stage >= questions.length
-      ) {
-
-        finish();
-
-      } else {
-
-        renderQuestion();
-
+  var defaultState = function () {
+    return {
+      stage: 1,
+      answers: [],
+      stats: { ambition: 0, courage: 0, curiosity: 0, change: 0, security: 0 },
+      finished: false,
+      settings: {
+        sound: true,
+        haptics: true,
+        reducedMotion: (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) || false
       }
-
-    },
-    state.motion ? 650 : 100
-  );
-
-}
-
-
-/* =========================================================
-   LOCAL AI
-========================================================= */
-
-function aiHint(category) {
-
-  const hints = {
-
-    "الشجاعة":
-      "لا تبحث عن الإجابة التي تبدو قوية. ابحث عن الإجابة الصادقة.",
-
-    "التأمل":
-      "خذ لحظة قبل أن تختار. بعض الأسئلة تحتاج صمتًا.",
-
-    "الفضول":
-      "إذا شعرت أن السؤال غريب، فهذا جيد. استكشفه.",
-
-    "الطموح":
-      "فكر فيما تريده فعلًا، وليس فيما يريده الآخرون منك.",
-
-    "المغامرة":
-      "ليس عليك معرفة النهاية حتى تبدأ.",
-
-    "التحول":
-      "التغيير يبدأ غالبًا من قرار صغير."
+    };
   };
 
-  return hints[category] || hints["التأمل"];
-
-}
+  var state = defaultState();
 
 
-function aiAfterAnswer(answer, category) {
+  /* =======================================================
+     3. أدوات مساعدة
+     ======================================================= */
 
-  const responses = {
+  function $(id) { return document.getElementById(id); }
 
-    yes: [
-      "إجابة مباشرة... البوصلة سجلتها.",
-      "لم تتردد كثيرًا.",
-      "إذن هناك شيء بداخلك يعرف الإجابة.",
-      "اختيار واضح. interesting..."
-    ],
+  function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
 
-    no: [
-      "الرفض أحيانًا يكون بداية فهم.",
-      "لا تعتبر كلمة لا ضعفًا.",
-      "البوصلة لاحظت هذا الاختيار.",
-      "ربما هذه الـ لا تخفي وراءها شيئًا."
-    ],
+  function completedStages() { return state.answers.length; }
 
-    maybe: [
-      "التردد ليس دائمًا ضعفًا.",
-      "ربما لأن السؤال أقرب مما توقعت.",
-      "البوصلة لم تحكم عليك.",
-      "هناك أشياء لا يمكن الإجابة عنها بسرعة."
-    ],
+  function currentChapterIndex() {
+    return clamp(Math.ceil(state.stage / STAGES_PER_CHAPTER), 1, chapters.length);
+  }
 
-    unknown: [
-      "عدم المعرفة إجابة أيضًا.",
-      "ربما تحتاج وقتًا.",
-      "احتفظ بهذا السؤال.",
-      "قد تعرف الإجابة في مرحلة قادمة."
-    ]
-  };
+  function isChapterUnlocked(chapterId) {
+    if (chapterId === 1) return true;
+    return completedStages() >= (chapterId - 1) * STAGES_PER_CHAPTER;
+  }
 
-  const list =
-    responses[answer === "نعم" ? "yes" :
-             answer === "لا" ? "no" :
-             answer === "ربما" ? "maybe" : "unknown"];
+  function isChapterComplete(chapterId) {
+    return completedStages() >= chapterId * STAGES_PER_CHAPTER;
+  }
 
-  aiSay(
-    list[Math.floor(Math.random() * list.length)]
-  );
+  function chapterPercent(chapterId) {
+    var start = (chapterId - 1) * STAGES_PER_CHAPTER;
+    var done = clamp(completedStages() - start, 0, STAGES_PER_CHAPTER);
+    return Math.round((done / STAGES_PER_CHAPTER) * 100);
+  }
 
-}
-
-
-function aiSay(text) {
-
-  $("aiMessage").style.opacity = "0";
-
-  setTimeout(
-    () => {
-
-      $("aiMessage").textContent =
-        text;
-
-      $("aiMessage").style.opacity =
-        "1";
-
-    },
-    state.motion ? 150 : 0
-  );
-
-}
-
-
-/* =========================================================
-   SYMBOL
-========================================================= */
-
-function symbolFor(category) {
-
-  const symbols = {
-
-    "الشجاعة": "✦",
-    "التأمل": "◌",
-    "الفضول": "?",
-    "الطموح": "↑",
-    "المغامرة": "◇",
-    "التحول": "↻"
-
-  };
-
-  return symbols[category] || "◈";
-
-}
-
-
-/* =========================================================
-   MAP
-========================================================= */
-
-function buildMap() {
-
-  const container =
-    $("mapNodes");
-
-  container.innerHTML = "";
-
-  for (
-    let i = 0;
-    i < questions.length;
-    i++
-  ) {
-
-    const node =
-      document.createElement("button");
-
-    node.className =
-      "map-node";
-
-    if (i < state.stage)
-      node.classList.add("done");
-
-    if (i === state.stage)
-      node.classList.add("active");
-
-    if (i > state.stage)
-      node.classList.add("locked");
-
-    node.textContent =
-      i + 1;
-
-    node.addEventListener(
-      "click",
-      () => {
-
-        if (i > state.stage)
-          return;
-
-        state.stage = i;
-
-        save();
-
-        show("journey");
-
-        renderQuestion();
-
+  function dominantTrait() {
+    var best = "curiosity";
+    var bestVal = -1;
+    traitOrder.forEach(function (k) {
+      if (state.stats[k] > bestVal) {
+        bestVal = state.stats[k];
+        best = k;
       }
-    );
-
-    container.appendChild(node);
-
+    });
+    return best;
   }
 
-}
+  function statTotal() {
+    var sum = 0;
+    traitOrder.forEach(function (k) { sum += state.stats[k]; });
+    return sum;
+  }
 
 
-function updateMap() {
+  /* =======================================================
+     4. التخزين المحلي
+     ======================================================= */
 
-  $("mapProgress").textContent =
-    `${Math.round(
-      (state.stage / questions.length) * 100
-    )}%`;
-
-  buildMap();
-
-}
-
-
-/* =========================================================
-   FINISH
-========================================================= */
-
-function finish() {
-
-  state.stage = questions.length;
-
-  save();
-
-  calculateResult();
-
-  show("profile");
-
-  stopAtmosphere();
-
-}
-
-
-function calculateResult() {
-
-  const scores = {
-    الشجاعة: 0,
-    الطموح: 0,
-    الفضول: 0,
-    التأمل: 0,
-    المغامرة: 0,
-    التحول: 0
-  };
-
-  state.answers.forEach(
-    answer => {
-
-      if (!answer) return;
-
-      scores[answer.category]++;
-
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      /* التخزين غير متاح — نستمر بدون حفظ */
     }
-  );
-
-  const max =
-    Math.max(...Object.values(scores));
-
-  const winner =
-    Object.keys(scores)
-      .find(key => scores[key] === max)
-      || "التأمل";
-
-  const total =
-    state.answers.filter(Boolean).length;
-
-  const percentage =
-    Math.round(
-      (total / questions.length) * 100
-    );
-
-  const descriptions = {
-
-    الشجاعة:
-      "أنت لا تحتاج إلى اختفاء الخوف حتى تتحرك. لديك ميل واضح لمواجهة الأشياء بدل الهروب منها.",
-
-    الطموح:
-      "داخلك رغبة قوية في بناء شيء أكبر. أنت لا تريد مجرد البقاء، بل تريد الوصول.",
-
-    الفضول:
-      "عقلك يبحث دائمًا عن إجابة أخرى. بالنسبة لك، الطريق أهم من الوصول السريع.",
-
-    التأمل:
-      "أنت شخص يفكر كثيرًا في المعنى والاختيارات. ترى تفاصيل قد لا يلاحظها الآخرون.",
-
-    المغامرة:
-      "المجهول لا يخيفك بالكامل. لديك استعداد لأن تدخل طرقًا لا تعرف نهايتها.",
-
-    التحول:
-      "أنت في مرحلة تغيير. ربما لم تصل بعد، لكنك لم تعد الشخص نفسه الذي بدأ الرحلة."
-  };
-
-  $("resultTitle").textContent =
-    winner;
-
-  $("resultDescription").textContent =
-    descriptions[winner];
-
-  $("homeProgress").textContent =
-    `${percentage}%`;
-
-  const stats = {
-
-    courage:
-      scorePercent(scores["الشجاعة"], max),
-
-    ambition:
-      scorePercent(scores["الطموح"], max),
-
-    curiosity:
-      scorePercent(scores["الفضول"], max),
-
-    reflection:
-      scorePercent(scores["التأمل"], max)
-
-  };
-
-  setStat(
-    "courage",
-    stats.courage
-  );
-
-  setStat(
-    "ambition",
-    stats.ambition
-  );
-
-  setStat(
-    "curiosity",
-    stats.curiosity
-  );
-
-  setStat(
-    "reflection",
-    stats.reflection
-  );
-
-  $("resultMessage").textContent =
-    `أجبت عن ${total} سؤالًا. ` +
-    `البوصلة ترى أنك تميل إلى ${winner}. ` +
-    `لكن النتيجة ليست حكمًا عليك. أنت من يقرر اتجاهك.`;
-
-}
-
-
-function scorePercent(value, max) {
-
-  if (!max) return 0;
-
-  return Math.min(
-    100,
-    Math.round(
-      (value / max) * 100
-    )
-  );
-
-}
-
-
-function setStat(name, value) {
-
-  $(`${name}Stat`).textContent =
-    `${value}%`;
-
-  $(`${name}Bar`).style.width =
-    `${value}%`;
-
-}
-
-
-/* =========================================================
-   RESTART
-========================================================= */
-
-$("restartBtn").addEventListener(
-  "click",
-  () => {
-
-    state.stage = 0;
-
-    state.answers = [];
-
-    save();
-
-    show("journey");
-
-    startAtmosphere();
-
-    renderQuestion();
-
   }
-);
 
-
-/* =========================================================
-   JOURNEY BACK
-========================================================= */
-
-$("journeyBack").addEventListener(
-  "click",
-  () => {
-
-    show("home");
-
-    stopAtmosphere();
-
+  function loadState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      var saved = JSON.parse(raw);
+      if (saved && typeof saved === "object") {
+        var fresh = defaultState();
+        state = {
+          stage: clamp(saved.stage || 1, 1, TOTAL_STAGES + 1),
+          answers: Array.isArray(saved.answers) ? saved.answers : [],
+          stats: Object.assign(fresh.stats, saved.stats || {}),
+          finished: !!saved.finished,
+          settings: Object.assign(fresh.settings, saved.settings || {})
+        };
+      }
+    } catch (e) {
+      state = defaultState();
+    }
   }
-);
 
-
-/* =========================================================
-   SETTINGS
-========================================================= */
-
-$("settingsOpen").addEventListener(
-  "click",
-  () => {
-
-    $("settings").classList.add("active");
-
+  function resetProgress() {
+    state = defaultState();
+    saveState();
+    render("home");
+    showToast("بدأت رحلة جديدة");
   }
-);
 
 
-$("settingsClose").addEventListener(
-  "click",
-  () => {
+  /* =======================================================
+     5. الصوت والاهتزاز (تفاعل حسي خفيف)
+     ======================================================= */
 
-    $("settings").classList.remove("active");
+  var audioCtx = null;
 
+  function unlockAudio() {
+    if (audioCtx || !window.AudioContext) return;
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+    catch (e) { audioCtx = null; }
   }
-);
 
-
-$("soundSwitch").addEventListener(
-  "change",
-  e => {
-
-    state.sound =
-      e.target.checked;
-
-    $("soundBtn").textContent =
-      state.sound ? "◉" : "○";
-
-    if (!state.sound)
-      stopAtmosphere();
-
-    save();
-
+  function playTone(freq, duration, type) {
+    if (!state.settings.sound || !audioCtx) return;
+    try {
+      var osc = audioCtx.createOscillator();
+      var gain = audioCtx.createGain();
+      osc.type = type || "sine";
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.06, audioCtx.currentTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    } catch (e) { /* تجاهل أخطاء الصوت */ }
   }
-);
 
-
-$("motionSwitch").addEventListener(
-  "change",
-  e => {
-
-    state.motion =
-      e.target.checked;
-
-    document.body.classList.toggle(
-      "reduced-motion",
-      !state.motion
-    );
-
-    save();
-
+  function soundTap() { playTone(420, 0.12, "sine"); }
+  function soundAdvance() { playTone(560, 0.16, "sine"); }
+  function soundChapter() { playTone(660, 0.2, "triangle"); setTimeout(function () { playTone(880, 0.25, "triangle"); }, 120); }
+  function soundFinish() {
+    [523, 659, 784, 1046].forEach(function (f, i) {
+      setTimeout(function () { playTone(f, 0.35, "triangle"); }, i * 130);
+    });
   }
-);
 
-
-$("soundBtn").addEventListener(
-  "click",
-  () => {
-
-    state.sound =
-      !state.sound;
-
-    $("soundSwitch").checked =
-      state.sound;
-
-    $("soundBtn").textContent =
-      state.sound ? "◉" : "○";
-
-    if (state.sound)
-      startAtmosphere();
-    else
-      stopAtmosphere();
-
-    save();
-
+  function haptic(ms) {
+    if (state.settings.haptics && "vibrate" in navigator) {
+      try { navigator.vibrate(ms || 10); } catch (e) { /* تجاهل */ }
+    }
   }
-);
 
 
-$("clearBtn").addEventListener(
-  "click",
-  () => {
+  /* =======================================================
+     6. التوست (إشعارات صغيرة)
+     ======================================================= */
 
-    if (
-      confirm(
-        "هل تريد مسح رحلتك بالكامل؟"
-      )
-    ) {
+  function showToast(message) {
+    var host = $("toastHost");
+    if (!host) return;
+    var el = document.createElement("div");
+    el.className = "toast";
+    el.textContent = message;
+    host.appendChild(el);
+    requestAnimationFrame(function () { el.classList.add("show"); });
+    setTimeout(function () {
+      el.classList.remove("show");
+      setTimeout(function () { el.remove(); }, 300);
+    }, 2600);
+  }
 
-      localStorage.removeItem(STORAGE);
 
-      state.stage = 0;
-      state.answers = [];
+  /* =======================================================
+     7. التنقل بين الشاشات
+     ======================================================= */
 
-      $("settings")
-        .classList.remove("active");
+  var screenRenderers = {};
 
-      show("home");
-
-      updateMap();
-
-      $("homeProgress").textContent =
-        "0%";
-
+  function render(screenName) {
+    if (screenName === "journey" && (state.stage > TOTAL_STAGES || state.finished)) {
+      screenName = "result";
+    }
+    if (screenName === "result" && !state.finished) {
+      screenName = "home";
     }
 
-  }
-);
+    document.querySelectorAll(".screen").forEach(function (el) {
+      el.classList.remove("active");
+    });
+    document.querySelectorAll(".bottom-nav button").forEach(function (btn) {
+      btn.classList.toggle("active", btn.dataset.screen === screenName);
+    });
 
+    var target = $(screenName);
+    if (!target) return;
 
-/* =========================================================
-   AMBIENT HORROR SOUND
-   Generated using Web Audio API
-========================================================= */
+    if (screenRenderers[screenName]) screenRenderers[screenName]();
 
-let audioContext = null;
-let masterGain = null;
-let drone = null;
-let droneGain = null;
-let wind = null;
-let windGain = null;
-
-function createAudio() {
-
-  if (audioContext)
-    return;
-
-  audioContext =
-    new (
-      window.AudioContext ||
-      window.webkitAudioContext
-    )();
-
-  masterGain =
-    audioContext.createGain();
-
-  masterGain.gain.value =
-    0.0001;
-
-  masterGain.connect(
-    audioContext.destination
-  );
-
-}
-
-
-function startAtmosphere() {
-
-  if (!state.sound)
-    return;
-
-  createAudio();
-
-  if (
-    audioContext.state ===
-    "suspended"
-  ) {
-
-    audioContext.resume();
-
+    target.classList.add("active");
+    if (!state.settings.reducedMotion) {
+      target.classList.remove("enter");
+      void target.offsetWidth; // إعادة تشغيل الأنيميشن
+      target.classList.add("enter");
+    }
+    window.scrollTo(0, 0);
   }
 
-  if (drone)
-    return;
 
-  drone =
-    audioContext.createOscillator();
+  /* =======================================================
+     8. عرض الشاشة الرئيسية
+     ======================================================= */
 
-  droneGain =
-    audioContext.createGain();
+  screenRenderers.home = function () {
+    var pct = Math.round((completedStages() / TOTAL_STAGES) * 100);
+    $("homeProgress").textContent = pct + "%";
+    $("homeProgressBar").style.width = pct + "%";
 
-  drone.type =
-    "sine";
+    var btn = $("startJourney");
+    if (state.finished) {
+      btn.querySelector("span").textContent = "شاهد نتيجتك";
+    } else if (completedStages() > 0) {
+      btn.querySelector("span").textContent = "تابع الرحلة";
+    } else {
+      btn.querySelector("span").textContent = "ابدأ الرحلة";
+    }
 
-  drone.frequency.value =
-    48;
-
-  droneGain.gain.value =
-    0.035;
-
-  drone.connect(droneGain);
-
-  droneGain.connect(masterGain);
-
-  drone.start();
+    updateCompass($("homeCompass"));
+  };
 
 
-  /*
-    Noise generator
-    creates a very quiet distant wind.
-  */
+  /* =======================================================
+     9. عرض الفصول
+     ======================================================= */
 
-  const bufferSize =
-    audioContext.sampleRate * 2;
+  screenRenderers.chapters = function () {
+    var grid = $("chaptersGrid");
+    grid.innerHTML = "";
 
-  const buffer =
-    audioContext.createBuffer(
-      1,
-      bufferSize,
-      audioContext.sampleRate
-    );
+    chapters.forEach(function (ch) {
+      var unlocked = isChapterUnlocked(ch.id);
+      var complete = isChapterComplete(ch.id);
+      var pct = chapterPercent(ch.id);
 
-  const data =
-    buffer.getChannelData(0);
+      var card = document.createElement("article");
+      card.className = "chapter-card" + (unlocked ? "" : " locked") + (complete ? " complete" : "");
+      card.dataset.chapter = ch.id;
 
-  for (
-    let i = 0;
-    i < bufferSize;
-    i++
-  ) {
-
-    data[i] =
-      Math.random() * 2 - 1;
-
-  }
-
-  wind =
-    audioContext.createBufferSource();
-
-  wind.buffer =
-    buffer;
-
-  wind.loop =
-    true;
-
-  windGain =
-    audioContext.createGain();
-
-  windGain.gain.value =
-    0.006;
-
-  wind.connect(windGain);
-
-  windGain.connect(masterGain);
-
-  wind.start();
-
-
-  masterGain.gain.cancelScheduledValues(
-    audioContext.currentTime
-  );
-
-  masterGain.gain.exponentialRampToValueAtTime(
-    0.75,
-    audioContext.currentTime + 2
-  );
-
-}
-
-
-function stopAtmosphere() {
-
-  if (!audioContext)
-    return;
-
-  masterGain.gain.cancelScheduledValues(
-    audioContext.currentTime
-  );
-
-  masterGain.gain.exponentialRampToValueAtTime(
-    0.0001,
-    audioContext.currentTime + 1
-  );
-
-  setTimeout(
-    () => {
-
-      try {
-
-        if (drone)
-          drone.stop();
-
-        if (wind)
-          wind.stop();
-
-      } catch(e) {}
-
-      drone = null;
-      wind = null;
-
-    },
-    1100
-  );
-
-}
-
-
-/* =========================================================
-   INITIALIZATION
-========================================================= */
-
-load();
-
-$("soundSwitch").checked =
-  state.sound;
-
-$("motionSwitch").checked =
-  state.motion;
-
-$("soundBtn").textContent =
-  state.sound ? "◉" : "○";
-
-document.body.classList.toggle(
-  "reduced-motion",
-  !state.motion
-);
-
-$("homeProgress").textContent =
-  `${Math.round(
-    (state.stage / questions.length) *
+      card.innerHTML =
+        '<div class="chapter-icon">' + ch.symbol + '</div>' +
+        '<div class="chapte
